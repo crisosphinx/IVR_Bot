@@ -8,7 +8,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord import Embed
-from Communications import comm
+from Communications import comm, classroomComm
 
 # Client
 Client = discord.Client()
@@ -94,6 +94,16 @@ async def on_ready():
     :return:
     """
 
+    global bot_channel
+    global rules_channel
+
+    # RE-INSTANTIATE THE CHANNEL ITSELF AS A CHANNEL, NOT AN INT
+    bot_channel = client.get_channel(bot_channel)
+    rules_channel = client.get_channel(rules_channel)
+
+    classes = classroomComm.main()
+    print(classes)
+
     utc = str(datetime.datetime.utcnow()).split('.')[0]
     info_to_print = """
 ```
@@ -101,9 +111,14 @@ Bot Online!
 Name:     {0}
 ID:       {1}
 Booted:   {2} UTC
+
+Google Classroom API
+====================
+Available courses ({3}):
+{4}
 ```
-""".format(client.user.name, client.user.id, utc)
-    await client.get_channel(id=bot_channel).send(info_to_print)
+""".format(client.user.name, client.user.id, utc, classes[0], classes[1])
+    await bot_channel.send(info_to_print)
     if DEBUG:
         print(info_to_print)
 
@@ -119,21 +134,27 @@ async def on_message(msg):
     guild = _message.guild  # this was easier than expected... >_>
 
     if message_author != client.user and message.startswith('ivr '):
-        async with message_channel.typing():
-            await _message.delete()
-            message = message.split("ivr ")[1]
-            await message_channel.send("{0}".format(message))
-            await client.get_channel(bot_channel).send("{0} sent: {1}".format(message_author, message))
+        message = message.split("ivr ")[1]
+        await comm.bot_send_message(
+            orig_msg=_message, msg="{0}".format(message),
+            chl=message_channel, bot_chl=bot_channel,
+            author=message_author
+        )
 
     elif message_author != client.user and message.startswith('!rules'):
-        rules = client.get_channel(rules_channel)
-        await comm.bot_send_message(_message, SEND_SPECIFIC, rules)
+        await comm.bot_send_message(
+            orig_msg=_message, msg=SEND_SPECIFIC,
+            chl=rules_channel, bot_chl=bot_channel
+        )
 
     elif message == 'ping':
         before = time.monotonic()
         message = await message_channel.send("Pong!")
         _ping = int(round((time.monotonic() - before) * 1000, 6))
-        await comm.bot_send_message(message, "Pong!  `{0} ms`".format(_ping), message_channel)
+        await comm.bot_send_message(
+            orig_msg=message, msg="Pong!  `{0} ms`".format(_ping),
+            chl=message_channel
+        )
 
         if DEBUG:
             print("Ping {0} ms".format(_ping))
