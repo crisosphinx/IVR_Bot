@@ -9,6 +9,7 @@ import discord
 from discord.ext import commands
 from discord import Embed
 from Communications import comm, classroomComm
+from globalVars import *
 
 # Client
 Client = discord.Client()
@@ -18,9 +19,6 @@ bot_prefix = 'ivr '
 client = commands.Bot(command_prefix=bot_prefix)
 bot_channel = 772649542818463744  # #bot-channel
 rules_channel = 772633892783390780  # #rules
-
-# Do we want a console debug
-DEBUG = True
 
 SEND_SPECIFIC = """
 ```
@@ -194,6 +192,12 @@ role. I am here to offer information if needed.
         if DEBUG:
             print("\nSending direct message to... {0}.".format(message_author))
 
+    elif message.lower().startswith("when is my next class?"):
+        # Do stuff
+        _class_name = message.lower().split(message.lower())[1]
+        # classroomComm.getNextClassSessionDate()
+        # classroomComm.getNextClassWork()
+        classroomComm.CourseInfo().query_info(_class_name)
 
 # Permissions number: 125952
 # --------------------------
