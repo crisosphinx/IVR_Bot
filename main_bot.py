@@ -10,6 +10,7 @@ from discord.ext import commands
 from discord import Embed
 from Communications import comm, classroomComm
 from globalVars import *
+from Documents.documentation import *
 
 # Client
 Client = discord.Client()
@@ -18,69 +19,10 @@ Client = discord.Client()
 bot_prefix = 'ivr '
 client = commands.Bot(command_prefix=bot_prefix)
 bot_channel = 772649542818463744  # #bot-channel
+bot_logger = 772639596286050324  # #bot-log
 rules_channel = 772633892783390780  # #rules
 
-SEND_SPECIFIC = """
-```
-Welcome to Universe!
-
-We are an online institution for mentoring, instructing and
-teaching students on the aspects of 3D Game Design and
-Development utilizing Unity!
-
-
-We offer the following programs, which are ever evolving as we grow larger:
-
-• Introduction to Unity,
-• AltSpace World Building with Unity,
-• Virtual Reality Application Development,
-• [More coming soon],
-
-
-
-
-Please follow the following rules when part of this server:
-
-»  This is a place of respect, please
-   respect the wishes of other users.
-
-»  Harassment, Discrimination of any 
-   sort, Sexism, Excessive Immaturity,
-   Abrasive Behavior and Toxicity are
-   not tolerated. 
-
-»  Constructive criticism (critique) is
-   key to a happy experience, criticism
-   in the non-constructive way will not
-   be tolerated.
-
-»  If a user asks you to stop, or asks
-   you to change topic, please do so.
-   Try to keep this place comfortable
-   for everyone. Remember, behind the
-   computer screen is a person!
-
-»  Do not advertise other servers. You
-   may only advertise the server if it
-   has been give the "okay" by staff.
-
-»  In order to view content on this server,
-   you must be assigned any role. Roles are
-   added after you have been added to the
-   class roster.
-
-»  No memes unless otherwise prompted.
-
-»  All nicknames must be mentionable.
-   Please follow the following format:
-   [Your name] / [AltSpace Username]
-   EX. Jeff / Criso
-
-»  In terms of NSFW content on this server,
-   please do not post any of it - this includes
-   in developing your games, applications, etc. 
-```
-"""
+# TODO: Clean up this code to make it more friendly. We want the very best, clean code to reference and disect.
 
 
 @client.event
@@ -93,14 +35,17 @@ async def on_ready():
     """
 
     global bot_channel
+    global bot_logger
     global rules_channel
 
     # RE-INSTANTIATE THE CHANNEL ITSELF AS A CHANNEL, NOT AN INT
     bot_channel = client.get_channel(bot_channel)
+    bot_logger = client.get_channel(bot_logger)
     rules_channel = client.get_channel(rules_channel)
 
-    classes = classroomComm.main()
-    print(classes)
+    classes = classroomComm.CourseInfo().roster()
+    if DEBUG:
+        print(classes)
 
     utc = str(datetime.datetime.utcnow()).split('.')[0]
     info_to_print = """
@@ -123,31 +68,45 @@ Available courses ({3}):
 
 @client.event
 async def on_message(msg):
-    _message = msg
-    message_channel = msg.channel
-    message_attachments = msg.attachments
-    message_author = msg.author
-    message_owner = msg.author.id
-    message = msg.content
-    guild = _message.guild  # this was easier than expected... >_>
+    """
+    When a message is sent, react...
 
+    :param msg: Passed message in dictionary format.
+    :return:
+    """
+
+    _message = msg                                  # Raw message
+    message_channel = msg.channel                   # Messages channel
+    message_attachments = msg.attachments           # Any attachments added to message
+    message_author = msg.author                     # Messages author
+    message_owner = msg.author.id                   # Messages author ID
+    message = msg.content                           # Content of the message (str)
+    guild = _message.guild                          # This was easier than expected... >_> gets the discord server name
+
+    # Determine that the message was not sent by the bot...
     if message_author != client.user and message.startswith('ivr '):
         message = message.split("ivr ")[1]
+
+        # Send the message through the bot.
         await comm.bot_send_message(
             orig_msg=_message, msg="{0}".format(message),
-            chl=message_channel, bot_chl=bot_channel,
+            chl=message_channel, bot_chl=bot_logger,
             author=message_author
         )
 
+    # Post the rules
     elif message_author != client.user and message.startswith('!rules'):
         await comm.bot_send_message(
-            orig_msg=_message, msg=SEND_SPECIFIC,
+            orig_msg=_message, msg=RULES,
             chl=rules_channel, bot_chl=bot_channel
         )
 
+    # Pong bot in whichever channel it was pinged in. Add milliseconds.
     elif message == 'ping':
         before = time.monotonic()
         message = await message_channel.send("Pong!")
+
+        # Calculate the ping time.
         _ping = int(round((time.monotonic() - before) * 1000, 6))
         await comm.bot_send_message(
             orig_msg=message, msg="Pong!  `{0} ms`".format(_ping),
@@ -157,6 +116,7 @@ async def on_message(msg):
         if DEBUG:
             print("Ping {0} ms".format(_ping))
 
+    # Clear the channel this was posted in.
     elif message.startswith('empty channel'):
         _m = list()
         _amount = message.split('empty channel')[1]
@@ -173,6 +133,7 @@ async def on_message(msg):
 
         await comm.delete_messages(messages=_m, channel=message_channel)
 
+    # Directly message user that pinged for help, with information.
     elif message == 'help':
         hello = """
 ```
@@ -189,15 +150,67 @@ role. I am here to offer information if needed.
 ```
 """.format(message_author, guild)
         await message_author.send(hello)
+        await comm.bot_send_message(
+            orig_msg=_message, msg="Sending help inquiry to... {0}.".format(message_author),
+            chl=bot_logger
+        )
         if DEBUG:
             print("\nSending direct message to... {0}.".format(message_author))
 
+    # Attain information and send the information to the user requesting it.
     elif message.lower().startswith("when is my next class?"):
-        # Do stuff
-        _class_name = message.lower().split(message.lower())[1]
-        # classroomComm.getNextClassSessionDate()
-        # classroomComm.getNextClassWork()
-        classroomComm.CourseInfo().query_info(_class_name)
+        # When is my next class? [class name]
+        # Perhaps we can get the class names, request an input, then type it out... Maybe better naming conventions
+        # For the class names should be put in order...?
+        _class_name = message.split("? ")[1]
+        _work = classroomComm.CourseInfo().get_class_work(_class_name)
+
+        # Perhaps... Separate the code below into a method elsewhere...? Let's ponder about what can be reused here...
+        _week = list(_work.keys())[0]
+        if _week != 'Complete':
+            _assignments = list(_work[_week].keys())
+            _a1 = _work[_week][_assignments[0]]
+            _a2 = _work[_week][_assignments[1]]
+            _a3 = _work[_week][_assignments[2]]
+
+            _final_info = """
+**{0}**:
+Assignment 1)
+    - {1}
+    - Due: {2}
+    - Link: _{3}_
+
+Assignment 2)
+    - {4}
+    - Due: {5}
+    - Link: _{6}_
+
+Assignment 3)
+    - {7}
+    - Due: {8}
+    - Link: _{9}_
+""".format(
+                _week,
+                _assignments[0], _a1[0], _a1[1],
+                _assignments[1], _a2[0], _a2[1],
+                _assignments[2], _a3[0], _a3[1],
+            )
+
+        else:
+            _final_info = """
+You've completed this class.
+"""
+
+        await message_author.send(_final_info)
+        try:
+            await comm.bot_send_message(
+                orig_msg=_message, msg="Send week schedule to {0}.".format(message_author),
+                chl=bot_logger
+            )
+
+        # If a user has messaged the bot directly... Just pass the error.
+        except discord.errors.Forbidden:
+            pass
 
 # Permissions number: 125952
 # --------------------------
@@ -221,5 +234,4 @@ with open(json_path, 'r') as f:
     token = json.load(f)
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(client.start(token['token']))
-# client.run(token['token'])
+loop.run_until_complete(client.start(token['token']))  # client.run(token['token'])

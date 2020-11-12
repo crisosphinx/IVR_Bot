@@ -12,6 +12,14 @@ client = commands.Bot(command_prefix=bot_prefix)
 
 @client.event
 async def delete_messages(messages=None, channel=None):
+    """
+    Delete messages in channel / specify the amount to delete if you wish.
+
+    :param messages: A list of message to delete.
+    :param channel: Which channel to delete the messages from.
+    :return:
+    """
+
     if messages is None:
         _m = list()
     else:
@@ -32,6 +40,17 @@ async def delete_messages(messages=None, channel=None):
 
 @client.event
 async def bot_send_message(orig_msg=None, msg=None, chl=None, bot_chl=None, author=None):
+    """
+    Send a message with the bot. Comes with the ability to delete the message, send a message, and so much more.
+
+    :param orig_msg: The original message to delete.
+    :param msg: A new message to send.
+    :param chl: The channel in which to send the message on.
+    :param bot_chl: The bot channel in which to send the message to, for logging.
+    :param author: The original messages author.
+    :return:
+    """
+
     async with chl.typing():
         if orig_msg is not None:
             await orig_msg.delete()
