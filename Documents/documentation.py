@@ -144,7 +144,7 @@ you found yourself an Easter Egg. If you found this
 by asking me, "who made you?", good on you for asking!
 """
 
-""" By the way, I said the bit above was an Easter Egg... This is the real Easter Egg...
+EASTEREGG = """ By the way, I said the bit above was an Easter Egg... This is the real Easter Egg...
                        .,,uod8B8bou,,.
               ..,uod8BBBBBBBBBBBBBBBBRPFT?l!i:.
          ,=m8BBBBBBBBBBBBBBBRPFT?!||||||||||||||

@@ -3,6 +3,7 @@
 from __future__ import print_function
 import pickle
 from datetime import datetime
+import os
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -32,9 +33,12 @@ class CourseInfo:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                cred_path = 'I:\\credentials.json'
-                if not os.path.isfile(cred_path):
-                    cred_path = 'C:\\Users\\jeff3\\Desktop\\credentials.json'
+                if os.name == 'nt':
+                    cred_path = 'I:\\credentials.json'
+                    if not os.path.isfile(cred_path):
+                        cred_path = 'C:\\Users\\jeff3\\Desktop\\credentials.json'
+                else:
+                    cred_path = '/usr/bin/credentials.json'
                 flow = InstalledAppFlow.from_client_secrets_file(
                     cred_path, SCOPES)
                 creds = flow.run_local_server(port=0)

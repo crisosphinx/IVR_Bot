@@ -22,11 +22,11 @@ bot_channel = 772649542818463744  # #bot-channel
 bot_logger = 772639596286050324  # #bot-log
 rules_channel = 772633892783390780  # #rules
 
-# TODO: Clean up this code to make it more friendly. We want the very best, clean code to reference and disect.
+# TODO: Clean up this code to make it more friendly. We want the very best, clean code to reference and dissect.
 
 
 @client.event
-async def on_ready():
+async def on_ready() -> None:
     """
     When it boots, we will clear the chat AND print back information in the
     console regarding our bot.
@@ -67,7 +67,7 @@ Available courses ({3}):
 
 
 @client.event
-async def on_message(msg):
+async def on_message(msg) -> None:
     """
     When a message is sent, react...
 
@@ -169,37 +169,10 @@ role. I am here to offer information if needed.
         _week = list(_work.keys())[0]
         if _week != 'Complete':
             _assignments = list(_work[_week].keys())
-            _a1 = _work[_week][_assignments[0]]
-            _a2 = _work[_week][_assignments[1]]
-            _a3 = _work[_week][_assignments[2]]
-
-            _final_info = """
-**{0}**:
-Assignment 1)
-    - {1}
-    - Due: {2}
-    - Link: _{3}_
-
-Assignment 2)
-    - {4}
-    - Due: {5}
-    - Link: _{6}_
-
-Assignment 3)
-    - {7}
-    - Due: {8}
-    - Link: _{9}_
-""".format(
-                _week,
-                _assignments[0], _a1[0], _a1[1],
-                _assignments[1], _a2[0], _a2[1],
-                _assignments[2], _a3[0], _a3[1],
-            )
+            _final_info = convert_to_output(week=_week, assignments=_work[_week])
 
         else:
-            _final_info = """
-You've completed this class.
-"""
+            _final_info = "\nYou've completed this class.\n"
 
         await message_author.send(_final_info)
         try:
@@ -211,6 +184,63 @@ You've completed this class.
         # If a user has messaged the bot directly... Just pass the error.
         except discord.errors.Forbidden:
             pass
+
+    elif message == "list classes":
+        classroomComm.main()
+
+
+def convert_to_output(week=str(), assignments=None) -> str:
+    """
+    Convert the passed information and turn it into a document to send back to the user
+
+    :param week: Which week is next.
+    :param assignments: The dictionary of assignments due.
+    :return:
+    """
+
+    # assignments = _work[week]
+    names = list(assignments.keys())
+    num_asgnmnts = len(names)
+    i = 1
+    months = {
+        1: "January", 2: "February", 3: "March", 4: "April",
+        5: "May", 6: "June", 7: "July", 8: "August",
+        9: "September", 10: "October", 11: "November", 12: "December"
+    }
+
+    formatted_doc = list()
+    formatted_doc.append("**{0}**".format(week))
+    while i <= num_asgnmnts:
+        assignment = names[i-1]
+        date = assignments[assignment][0].split("-")
+        _formatted_date = "{0} {1}, {2}".format(months[int(date[1])], resolve_suffix(int(date[2])), date[0])
+        _assign = """
+Assignment {0})
+    - {1}
+    - Due: {2}
+    - Link: _{3}_
+""".format(i, assignment, _formatted_date, assignments[assignment][1])
+        formatted_doc.append(_assign)
+        i += 1
+
+    doc = "".join(formatted_doc)
+
+    return doc
+
+
+def resolve_suffix(number=int()) -> str:
+    """
+    Pass a number and get the correct suffix attached to it and return said number
+
+    :param number: pass an integer
+    :return:
+    """
+    number_suffix = ["th", "st", "nd", "rd"]
+
+    if number % 10 in [1, 2, 3] and number not in [11, 12, 13]:
+        return "{0}{1}".format(number, number_suffix[number % 10])
+    else:
+        return "{0}{1}".format(number, number_suffix[0])
 
 # Permissions number: 125952
 # --------------------------
