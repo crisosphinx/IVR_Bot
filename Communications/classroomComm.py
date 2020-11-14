@@ -3,8 +3,8 @@
 from __future__ import print_function
 import pickle
 from datetime import datetime
-import os
-import os.path
+import os.path as path
+from Documents.formatter import *
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -24,7 +24,7 @@ class CourseInfo:
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists('token.pickle'):
+        if path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
 
@@ -33,12 +33,7 @@ class CourseInfo:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                if os.name == 'nt':
-                    cred_path = 'I:\\credentials.json'
-                    if not os.path.isfile(cred_path):
-                        cred_path = 'C:\\Users\\jeff3\\Desktop\\credentials.json'
-                else:
-                    cred_path = '/usr/bin/credentials.json'
+                cred_path = find_file('credentials')
                 flow = InstalledAppFlow.from_client_secrets_file(
                     cred_path, SCOPES)
                 creds = flow.run_local_server(port=0)
@@ -133,7 +128,10 @@ def main():
     """
 
     assignments = CourseInfo().get_class_work("Universe: Introduction to Unity in VR")
-    print(assignments)
+    if DEBUG:
+        print(assignments)
+
+    return assignments
 
 
 if __name__ == '__main__':

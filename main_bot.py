@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import time
 import datetime
 import json
@@ -8,9 +7,8 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord import Embed
-from Communications import comm, classroomComm
-from globalVars import *
-from Documents.documentation import *
+from Communications import comm
+from Documents.formatter import *
 
 # Client
 Client = discord.Client()
@@ -43,10 +41,7 @@ async def on_ready() -> None:
     bot_logger = client.get_channel(bot_logger)
     rules_channel = client.get_channel(rules_channel)
 
-    classes = classroomComm.CourseInfo().roster()
-    if DEBUG:
-        print(classes)
-
+    classes = combine_roster()
     utc = str(datetime.datetime.utcnow()).split('.')[0]
     info_to_print = """
 ```
@@ -57,10 +52,9 @@ Booted:   {2} UTC
 
 Google Classroom API
 ====================
-Available courses ({3}):
-{4}
+{3}
 ```
-""".format(client.user.name, client.user.id, utc, classes[0], classes[1])
+""".format(client.user.name, client.user.id, utc, classes)
     await bot_channel.send(info_to_print)
     if DEBUG:
         print(info_to_print)
@@ -135,6 +129,14 @@ async def on_message(msg) -> None:
 
     # Directly message user that pinged for help, with information.
     elif message == 'help':
+        classes = combine_roster()
+        _staff_help = """
+• AltSpace events are every 4:00 P.M. EST on Sat.,
+• Office hours are at 12:00 P.M. - 1:00 P.M. on Sat.,
+• If you require office hour earlier in the week,
+  contact one of the instructors for assistance.
+"""
+
         hello = """
 ```
 Hello {0},
@@ -143,12 +145,16 @@ Welcome to {1}! This is the {1} Bot. If you require
 a particular role, please ask the staff for that
 role. I am here to offer information if needed.
 
-• AltSpace events are every 4:00 P.M. EST on Sat.,
-• Office hours are at 12:00 P.M. - 1:00 P.M. on Sat.,
-• If you require office hour earlier in the week,
-  contact one of the instructors for assistance.
+{2}
+
+{3}
+
+Commands:
+• help
+• list classes
+• when is my next class? [put the class name here]
 ```
-""".format(message_author, guild)
+""".format(message_author, guild, _staff_help, classes)
         await message_author.send(hello)
         await comm.bot_send_message(
             orig_msg=_message, msg="Sending help inquiry to... {0}.".format(message_author),
@@ -186,78 +192,21 @@ role. I am here to offer information if needed.
             pass
 
     elif message == "list classes":
-        classroomComm.main()
+        assignments = combine_roster()
+        await comm.bot_send_message(orig_msg=_message)
+        await message_author.send(assignments)
 
-
-def convert_to_output(week=str(), assignments=None) -> str:
-    """
-    Convert the passed information and turn it into a document to send back to the user
-
-    :param week: Which week is next.
-    :param assignments: The dictionary of assignments due.
-    :return:
-    """
-
-    # assignments = _work[week]
-    names = list(assignments.keys())
-    num_asgnmnts = len(names)
-    i = 1
-    months = {
-        1: "January", 2: "February", 3: "March", 4: "April",
-        5: "May", 6: "June", 7: "July", 8: "August",
-        9: "September", 10: "October", 11: "November", 12: "December"
-    }
-
-    formatted_doc = list()
-    formatted_doc.append("**{0}**".format(week))
-    while i <= num_asgnmnts:
-        assignment = names[i-1]
-        date = assignments[assignment][0].split("-")
-        _formatted_date = "{0} {1}, {2}".format(months[int(date[1])], resolve_suffix(int(date[2])), date[0])
-        _assign = """
-Assignment {0})
-    - {1}
-    - Due: {2}
-    - Link: _{3}_
-""".format(i, assignment, _formatted_date, assignments[assignment][1])
-        formatted_doc.append(_assign)
-        i += 1
-
-    doc = "".join(formatted_doc)
-
-    return doc
-
-
-def resolve_suffix(number=int()) -> str:
-    """
-    Pass a number and get the correct suffix attached to it and return said number
-
-    :param number: pass an integer
-    :return:
-    """
-    number_suffix = ["th", "st", "nd", "rd"]
-
-    if number % 10 in [1, 2, 3] and number not in [11, 12, 13]:
-        return "{0}{1}".format(number, number_suffix[number % 10])
-    else:
-        return "{0}{1}".format(number, number_suffix[0])
 
 # Permissions number: 125952
 # --------------------------
 # View Channels
 # Send Messages
 # Manage Messages
-# Embed Links
+# Embed LinksW
 # Attach Files
 # Read Message History
 
-# Our token path
-if os.name == 'nt':
-    json_path = 'I:\\IVR_token.json'
-    if not os.path.isfile(json_path):
-        json_path = 'C:\\Users\\jeff3\\Desktop\\IVR_token.json'
-else:
-    json_path = '/usr/bin/IVR_token.json'
+json_path = find_file('IVR_token')
 
 # Launch our bot
 with open(json_path, 'r') as f:

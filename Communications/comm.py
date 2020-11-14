@@ -51,11 +51,20 @@ async def bot_send_message(orig_msg=None, msg=None, chl=None, bot_chl=None, auth
     :return:
     """
 
-    async with chl.typing():
+    if chl is not None:
+        async with chl.typing():
+            if orig_msg is not None:
+                await orig_msg.delete()
+            if msg is not None:
+                await chl.send(msg)
+            if bot_chl is not None and author is not None:
+                await bot_chl.send("{0} sent: {1}".format(author, msg))
+            elif bot_chl is not None and author is None:
+                await bot_chl.send("In {0}, I sent: {1}".format(chl, msg))
+
+    else:
         if orig_msg is not None:
             await orig_msg.delete()
-        if msg is not None:
-            await chl.send(msg)
         if bot_chl is not None and author is not None:
             await bot_chl.send("{0} sent: {1}".format(author, msg))
         elif bot_chl is not None and author is None:
