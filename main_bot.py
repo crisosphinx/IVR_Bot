@@ -206,11 +206,11 @@ Commands:
 # Attach Files
 # Read Message History
 
-json_path = find_file('IVR_token')
+json_path = find_file('Tokens')
 
 # Launch our bot
 with open(json_path, 'r') as f:
     token = json.load(f)
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(client.start(token['token']))  # client.run(token['token'])
+loop.run_until_complete(client.start(token['ivrBot']))  # client.run(token['token'])
