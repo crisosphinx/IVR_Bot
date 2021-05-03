@@ -86,7 +86,7 @@ in VR for over a year now having instructed 5 Unity
 courses in VR. I am the owner of CSinVR, the 5th
 largest VR event channel and have run over 50 computer
 science session in VR that have attracted over 7,000
-attendees. I have developed worlds for Altspace using
+attendees. I have developed worlds for AltSpace using
 Unity that have over 1,000 joins, developed the VRQuiz
 MRE, and managed development of Universe's VR tutoring
 app. I am also currently a senior computer science

@@ -1,7 +1,6 @@
 from Documents.documentation import *
-from globalVars import *
 import os
-from Communications import classroomComm
+# from Communications import classroomComm
 
 
 def convert_to_output(week=str(), assignments=None) -> str:
@@ -53,18 +52,15 @@ def resolve_suffix(number=int()) -> str:
         return "{0}{1}".format(number, number_suffix[0])
 
 
-def combine_roster():
-    classes = classroomComm.CourseInfo().roster()
-
-    if DEBUG:
-        print(classes)
-
-    roster_info = """
-Available courses ({0}):
-{1}
-""".format(classes[0], classes[1])
-
-    return roster_info
+# def combine_roster():
+#     classes = classroomComm.CourseInfo().roster()
+#
+#     roster_info = """
+# Available courses ({0}):
+# {1}
+# """.format(classes[0], classes[1])
+#
+#     return roster_info
 
 
 def find_file(name=str()):

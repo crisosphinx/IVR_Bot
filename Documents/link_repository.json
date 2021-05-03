@@ -1,0 +1,29 @@
+{
+  "Websites": {
+      "TryUniverse": "https://www.TryUniverse.com/",
+      "Blender": "https://www.blender.org/",
+      "Unity": "https://www.unity.com/",
+      "LearnUnity": "https://learn.unity.com/",
+      "PlayUnity": "https://play.unity.com/",
+      "AltSpace": "https://account.altvr.com/events/main",
+      "XNormal": "https://xnormal.net/",
+      "Canva": "https://www.canva.com/",
+      "IntroToUnity": "1eqg9qUaFz1oc9m-DfcHBKQHtGvTdHtF7vs82RkX27bo",
+      "Compendium": "1lgTFT30S5noilIi2hmNg6MjbPb56njsNI7RIhDF8Zi0"
+  },
+  "Instructors": {
+      "Jeff Miller": ["https://www.jeff3danimation.com/"]
+  },
+  "Downloads": {
+      "FBXExporter": "https://github.com/crisosphinx/FBXExporterForUnity/archive/refs/heads/master.zip",
+      "AltSpaceUploader": "https://altvr.com/download-latest-unity-uploader/",
+      "2019.4.2-Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Win",
+      "2019.4.2-Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Mac",
+      "2018.4.34-Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Win",
+      "2018.4.34-Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Mac"
+  },
+  "2018API": "https://docs.unity3d.com/2018.4/Documentation/ScriptReference/",
+  "2019API": "https://docs.unity3d.com/2019.4/Documentation/ScriptReference/",
+  "2020API": "https://docs.unity3d.com/2020.3/Documentation/ScriptReference/",
+  "2021API": "https://docs.unity3d.com/2021.1/Documentation/ScriptReference/"
+}
