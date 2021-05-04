@@ -13,7 +13,7 @@ from discord.ext import commands
 from discord.ext.commands import bot
 from discord.utils import get
 from Documents.formatter import *
-from Platform import Utilities
+from Platform import Utilities, GoogleComm
 
 
 # Intents
@@ -133,7 +133,7 @@ async def on_message(msg):
         else:
             _c = _author
 
-        _msg = _content.split(" ")[1]
+        _msg = "".join(_content.split(" ")[1:])
         _return = Utilities.DefinitionUnity(_msg)(True)
         if _return:
             reconfigure = dict()
@@ -148,7 +148,7 @@ async def on_message(msg):
             _first_message.url = _return[1]
             _first_message.description = _return[2]
 
-            async with msg.channel.typing():
+            async with _c.typing():
                 for key in reconfigure:
                     value = reconfigure[key]
                     # determine the amount of characters in properties of the key
@@ -212,14 +212,14 @@ async def on_message(msg):
             _c = _author
 
         _dls = Utilities.JsonRead()()["Downloads"]
-        _get = _content.split(" ")[1]
+        _get = "".join(_content.split(" ")[1:])
         for each in list(_dls.keys()):
             if _get.lower() in each.lower():
                 _download = _dls[each]
                 if "." in _get:
                     _year, _edition, _type = each.split(".")
-                    _ver = _type.split("-")[0]
-                    _type = _type.split("-")[1]
+                    _ver = _type.split(" ")[0]
+                    _type = _type.split(" ")[1]
                     embed = Embed()
                     embed.url = _download
                     embed.title = "{0}.{1}.{2} {3} Download".format(_year, _edition, _ver, _type)
@@ -245,10 +245,13 @@ async def on_message(msg):
         else:
             _c = _author
         _web = Utilities.JsonRead()()["Websites"]
-        _get = _content.split(" ")[1]
+        _get = "".join(_content.split(" ")[1:])
         for each in list(_web.keys()):
-            if _get.lower() in each.lower():
-                _website = _web[each]
+            if _get.lower() == each.lower():
+                if "Intro" in each or "Compendium" in each:
+                    _website = "https://docs.google.com/document/d/{0}".format(_web[each])
+                else:
+                    _website = _web[each]
                 embed = Embed()
                 embed.url = _website
                 embed.title = each
@@ -259,6 +262,23 @@ async def on_message(msg):
             pass
         elif _checkmsg.non_bot(msg):
             await msg.delete()
+
+    elif _content.startswith(("!about", "?about")):
+        _start = _content.split(" ")[0]
+        if _start.startswith("!"):
+            _c = bot_channel
+        else:
+            _c = _author
+        _teach = Utilities.JsonRead()()["Instructors"]
+        _get = "".join(_content.split(" ")[1:])
+        for each in list(_teach.keys()):
+            if _get.lower() == each.lower():
+                _website = _teach[each]
+                embed = Embed()
+                embed.url = _website
+                embed.title = each
+                embed.description = "Website link for {0}.".format(each)
+                await _c.send(embed=embed)
 
     else:
         await client.process_commands(msg)

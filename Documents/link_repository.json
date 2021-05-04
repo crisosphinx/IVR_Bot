@@ -17,10 +17,10 @@
   "Downloads": {
       "FBXExporter": "https://github.com/crisosphinx/FBXExporterForUnity/archive/refs/heads/master.zip",
       "AltSpaceUploader": "https://altvr.com/download-latest-unity-uploader/",
-      "2019.4.2-Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Win",
-      "2019.4.2-Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Mac",
-      "2018.4.34-Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Win",
-      "2018.4.34-Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Mac"
+      "2019.4.2 Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Win",
+      "2019.4.2 Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Mac",
+      "2018.4.34 Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Win",
+      "2018.4.34 Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Mac"
   },
   "2018API": "https://docs.unity3d.com/2018.4/Documentation/ScriptReference/",
   "2019API": "https://docs.unity3d.com/2019.4/Documentation/ScriptReference/",
