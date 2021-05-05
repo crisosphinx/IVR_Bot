@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
 
-
-import time
-from math import floor, ceil
+import os
 import re
 import json
 import datetime
 import asyncio
-import discord
-from discord import message, user, channel, Client, DMChannel, Embed, Color, File, Intents
+from discord import channel, DMChannel, Embed, Intents
 from discord.ext import commands
 from discord.ext.commands import bot
-from discord.utils import get
 from Documents.formatter import *
 from Platform import Utilities, GoogleComm
 
@@ -97,9 +93,15 @@ async def on_ready() -> None:
     Bot Online!
     Name:     {0}
     ID:       {1}
+    Version:  {3}
     Booted:   {2} UTC
     ```
-    """.format(client.user.name, client.user.id, utc)
+    """.format(
+        client.user.name,
+        client.user.id,
+        utc,
+        Utilities.SettingsRead()()["VERSION"]
+    )
     await bot_channel.send(info_to_print)
 
 
@@ -280,8 +282,46 @@ async def on_message(msg):
                 embed.description = "Website link for {0}.".format(each)
                 await _c.send(embed=embed)
 
+    elif _content.lower().startswith("when is my next class? "):
+        _classname = _content.split("? ")[1]
+        _work = GoogleComm.AttainGoogleClass()(_classname)
+        # Perhaps... Separate the code below into a method elsewhere...? Let's ponder about what can be reused here...
+        _week = list(_work.keys())[0]
+        if _week != 'Complete':
+            _assignments = list(_work[_week].keys())
+            _final_info = convert_to_output(week=_week, assignments=_work[_week])
+
+        else:
+            _final_info = "\nYou've completed this class.\n"
+
+        await ctx.send(_final_info)
+
     else:
         await client.process_commands(msg)
+
+
+@client.command(name="version", pass_context=True)
+async def version(ctx):
+    _ver = Utilities.SettingsRead()()['VERSION']
+    await ctx.author.send("Bot is running software version: {0}".format(_ver))
+
+
+@client.command(name="whatis", pass_context=True)
+async def define(ctx):
+    _msg = ctx.message.content
+    _author = ctx.author
+    _word = _msg.split("whatis ")[1]
+    _info = Utilities.DefineWord()(_word)
+    embed = Embed()
+    embed.title = _info[0]
+    embed.url = _info[1]
+    embed.description = "Definition of {0}.".format(_info[0])
+    for each in list(_info[2].keys()):
+        if len(_info[2][each]) > 0:
+            embed.add_field(name=each, value=" - " + "\n - ".join(_info[2][each]), inline=True)
+
+    await ctx.message.delete()
+    await _author.send(embed=embed)
 
 
 # Permissions number: 125952

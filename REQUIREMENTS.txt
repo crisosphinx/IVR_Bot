@@ -7,3 +7,5 @@ PyDrive
 beautifulsoup4
 selenium
 cattrs
+pillow
+requests

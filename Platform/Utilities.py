@@ -190,6 +190,44 @@ class DefinitionUnity(object):
             return False
 
 
+class DefineWord(object):
+    def __init__(self) -> None:
+        self.soup = None
+        self.define = JsonRead()()["Websites"]["Define"]
+        self.word = str()
+        self.link = str()
+        self.defdict = {
+            "noun": [],
+            "verb": [],
+            "adjective": [],
+            "adverb": []
+        }
+
+    def __call__(self, _word: str) -> tuple:
+        self.word = _word
+        self.info()
+        return self.word, self.link, self.defdict
+
+    def search(self) -> tuple:
+        if self.word is not None:
+            _link = "{0}{1}".format(self.define, self.word)
+            _page = requests.get(_link)
+            self.soup = Bs(_page.content, "html.parser")
+            return self.word, self.soup, _link
+        else:
+            return None, None, None
+
+    def info(self):
+        self.word, self.soup, self.link = self.search()
+        for _each in self.soup.find_all("span", class_="e1q3nk1v1"):
+            if _each.string is not None and len(_each.string.split(" ")) > 3:
+                _identifier = _each.parent.parent.parent.parent.parent.find("span", class_="luna-pos")
+                if _identifier is not None and _identifier.string is not None:
+                    _identifier = _identifier.string.replace(",", "")
+                    self.defdict.setdefault(_identifier, []).append(_each.string)
+
+
 if __name__ == '__main__':
-    _x = DefinitionUnity("camera")(False)
-    print(_x, len(_x))
+    # _x = DefinitionUnity("camera")(False)
+    # print(_x, len(_x))
+    DefineWord()("purple")
