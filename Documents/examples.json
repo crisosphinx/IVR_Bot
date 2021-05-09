@@ -109,9 +109,15 @@
     "var f = 'g';",
     "var test(){\n    var a = 1;\n    return a; // returns an integer in this case, but it is an integer through a dynamic variable.\n}"
   ],
+  "object": [
+    "object a;",
+    "object a = null;",
+    "object b = 'S';",
+    "object c = \"test\";"
+  ],
   "null": [
     "var a = null;",
-    "if (a == null){\n    Debug.Log(“null object”);\n}"
+    "if (a == null){\n    Debug.Log(\"null object\");\n}"
   ],
   "decimal": [
     "decimal d;",
@@ -142,13 +148,13 @@
     "int n = 0;\ndo {\n    Debug.Log(n);\n    n++;\n}\nwhile (n < 4);"
   ],
   "foreach": [
-    "var names = new List<String> {\"Felicia\", \"Ragnorak\", \"Sam\", \"Maria\", \"Trevor\", \"Shiva\"};\nforeach (string name in names){\n    Debug.Log($\",”Hello {name.ToString()}!\");\n}"
+    "var names = new List<String> {\"Felicia\", \"Ragnorak\", \"Sam\", \"Maria\", \"Trevor\", \"Shiva\"};\nforeach (string name in names){\n    Debug.Log($\",\"Hello {name.ToString()}!\");\n}"
   ],
   "for": [
     "for (int i = 0; i < 10; i++){\n    Debug.Log(i.ToString());\n}"
   ],
   "switch": [
-    "int switchCase = 1;\nswitch (switchCase){\n    case 0:\n        Debug.Log(“Case 0”);\n        break;\n    case 1:\n        Debug.Log(“Case 1”);\n        break;\n    case 2:\n        Debug.Log(“Case 2”);\n        break;\n    default:\n        Debug.Log(\"Case \\\\\"Default\\\\\"\");\n        break;\n}"
+    "int switchCase = 1;\nswitch (switchCase){\n    case 0:\n        Debug.Log(\"Case 0\");\n        break;\n    case 1:\n        Debug.Log(\"Case 1\");\n        break;\n    case 2:\n        Debug.Log(\"Case 2\");\n        break;\n    default:\n        Debug.Log(\"Case \\\\\"Default\\\\\"\");\n        break;\n}"
   ],
   "try / catch / finally": [
     "static void Main(){\n    int n;\n    try {\n        // Do not initialize this variable here.\n        n = 123;\n    }\n    catch {\n    }\n    finally {\n        // Error: Use of unassigned local variable 'n'.\n        Console.Write(n);\n    }\n}"
@@ -168,19 +174,23 @@
     "struct Coordinate\n{\n    public int x;\n    public int y;\n}\nCoordinate point = new Coordinate();\nDebug.Log(point.x);  // prints 0\nDebug.Log(point.y);  // prints 0"
   ],
   "static": [
-
+    "static void Main(){\n    // Add your code here\n};",
+    "private static void Main(){\n    // Add your code here\n};",
+    "public static void Main(){\n    // Add your code here\n};",
+    "private static bool = false;"
   ],
   "abstract": [
-
+    "abstract class Animal\n{\n    public abstract void animalSound();\n    public void sleep()\n    {\n        Debug.Log(\"zzz\");\n    }\n}\nAnimal myObj = new Animal(); // Will generate an error because this cannot create an instance of an abstract class or interface."
   ],
   "interface": [
-
+    "interface Animal\n{\n    void animalSound(); // interface method (does not have a body)\n    void run(); // another interface method (does not have a body)\n}",
+    "interface Animal\n{\n    void animalSound();\n}\n\nclass Pig : Animal\n{\n     public void animalSound()\n     {\n         Debug.Log(\"The pig says: \\\"squeal squeal\\\"!\");\n     }\n}\n\nclass Program\n{\n    static void Main(string[] args)\n    {\n        Pig myPig = new Pig(); // creates a pig object\n        myPig.animalSound(); // should squeal!\n    }\n}"
   ],
   "virtual": [
-    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(“Hello! This is a Base Class!”);\n    }\n}"
+    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(\"Hello! This is a Base Class!\");\n    }\n}"
   ],
   "override": [
-    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(“Hello! This is a Base Class!”);\n    }\n}\n\n// Derived Class\nclass B : A // In our projects, we use “MonoBehaviour” as our base class\n{\n    public override void show()\n    {\n        Debug.Log(“Hello! This is a Derived Class!”);\n    }\n}"
+    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(\"Hello! This is a Base Class!\");\n    }\n}\n\n// Derived Class\nclass B : A // In our projects, we use \"MonoBehaviour\" as our base class\n{\n    public override void show()\n    {\n        Debug.Log(\"Hello! This is a Derived Class!\");\n    }\n}"
   ],
   "new": [
     "MyClass mc = new MyClass();",
@@ -268,8 +278,8 @@
     "int a = 0;\nbool b = true;\nwhile (a < 100 && b){\nb = false;\n}"
   ],
   "||": [
-    "if (1 < 0 || 0 == 0)\n{\n    Debug.Log(“true”);\n    // this prints true, because 0 is equal to 0\n}",
-    "if (-1 < 0 || 1 == 0)\n{\n    Debug.Log(“true”);\n    // this prints true, because -1 is less than 0\n}"
+    "if (1 < 0 || 0 == 0)\n{\n    Debug.Log(\"true\");\n    // this prints true, because 0 is equal to 0\n}",
+    "if (-1 < 0 || 1 == 0)\n{\n    Debug.Log(\"true\");\n    // this prints true, because -1 is less than 0\n}"
   ],
   "==": [
     "if (0 == 0){\n    Debug.Log(true);  // Prints true\n}",
@@ -280,28 +290,41 @@
     "if (100 != 0){\n    Debug.Log(true);  // is true\n}\nelse{\n    Debug.Log(false); // Prints true\n}"
   ],
   ">=": [
-
+    "if (2.3 >= 2){\n    Debug.Log(true); // This will print true due to 2.3 being greater than or equal to 2.0\n}",
+    "if (100 >= -200){\n    Debug.Log(true); // This will print true due to 100 being greater than or equal to -200\n}",
+    "if (10 >= 200){\n    Debug.Log(true);\n}\nelse{\n    Debug.Log(false); // This will print false, because 10 is less than 200\n}"
   ],
   "<=": [
-
+    "if (0 <= 1){\n    Debug.Log(true); // This will print true due to 0 being less than or equal to 1.\n}",
+    "if (1 <= 1){\n    Debug.Log(true); // This will print true due to 1 being less than or equal to 1.\n}",
+    "if (3 <= 1){\n    Debug.Log(true); // This will not do anything. 3 is greater than 1.\n}"
   ],
   "<<": [
-
+    "byte a;\na = 1 << 3;\nDebug.Log(a); // Prints 8, as we are bitwise shifting 1 to the left 3 bytes".,
+    "byte a = 0b_1111_0001;\nvar b = a << 8;\nConsole.WriteLine(b.GetType());\nConsole.WriteLine($\"Shifted byte: {Convert.ToString(b, toBase: 2)}\");"
   ],
   ">>": [
-
+    "uint x = 0b_1001;\nConsole.WriteLine($\"Before: {Convert.ToString(x, toBase: 2), 4}\");\n\nuint y = x >> 2;\nConsole.WriteLine($\"After:  {Convert.ToString(y, toBase: 2), 4}\");\n// Output:\n// Before: 1001\n// After:    10",
+    "int a = int.MinValue;\nConsole.WriteLine($\"Before: {Convert.ToString(a, toBase: 2)}\");\n\nint b = a >> 3;\nConsole.WriteLine($\"After:  {Convert.ToString(b, toBase: 2)}\");\n// Output:\n// Before: 10000000000000000000000000000000\n// After:  11110000000000000000000000000000"
   ],
   "+=": [
-
+    "int a = 0;\na += 1; // \"a\" now equals 1.\nDebug.Log(a);",
+    "float a = 3.2f;\na += 1.05f; // \"a\" now equals 4.25.\nDebug.Log(a);",
+    "int a = 0;\nwhile (a < 10){\n    Debug.Log(a);\n    a += 1;\n}"
   ],
   "-=": [
-
+    "int a = 0;\na -= 1; // \"a\" now equals -1\nDebug.Log(a);",
+    "float a = 200.4f;\na -= 200f; // \"a\" now equals .4\nDebug.Log(a);",
+    "float a = 20f;\nwhile (a > 10){\n    Debug.Log(a);\n    a -= .1;\n}"
   ],
   "*=": [
-
+    "int g = 1;\ng *= 1; // \"g\" still equals 1",
+    "float g = -1f;\ng *= -1f; // \"g\" equals 1, not -1",
+    "int a = 2;\nwhile (a < 100){\n    Debug.Log(a);\n    a *= 5;\n}"
   ],
   "/=": [
-    "int i = 50;\ni /= 2;  // this is the same as  i = i / 2;\nDebug.Log(i); // prints 25 to the debug menu"
+    "int i = 50;\ni /= 2;  // this is the same as  i = i / 2;\nDebug.Log(i); // prints 25 to the debug menu",
+    "int a = 200;\nwhile (a > 0){\n    Debug.Log(a);\n    a /= 2;\n}"
   ],
   "|=": [
     "uint a = 0b_1111_1000;\na |= 0b_0011_0001;\nDebug.Log(a);  // output: 10111001"
@@ -337,5 +360,88 @@
   ],
   ">>=": [
     "uint a = 0b_1111_1000;\na >>= 4;\nDebug.Log(a); // output:     1110"
+  ],
+  "as": [
+    "string c = \"test\";\nobject a = c;\nstring b = a as string;\nConsole.WriteLine(b);"
+  ],
+  "is": [
+    "E is T ? (T)(E) : (T)null;",
+    "string a = \"test\";\nobject b = a;\nobject c = b is string ? (string)(b) : (object)null;\nConsole.WriteLine(b);"
+  ],
+  "casting": [
+    "double x = 1234.7;\nint a = (int)x; // now equals 1234"
+  ],
+  "list": [
+    "List<Type> name = new List<Type>();",
+    "List<string> wordList = new List<string>() {\"TEST\", \"TESTER\", \"Hello World\"};"
+  ],
+  "array": [
+    "int[] b = {1,2,3,4,5,6};",
+    "string[] c = {\"asdf\",\"zxcv\",\"qwer\",\"bigbob\",\"cheetah\"};",
+    "char[] c = {'a', 'b', 'c', 'D', 'e', 'F'};"
+  ],
+  "dictionary": [
+    "Dictionary<string, int> a = new Dictionary<string, int>() {{\"test\", 1}, {\"test2\", 2}, {\"test3\", 3}};",
+    "Dictionary<string, string> a = new Dictionary<string, int>();\na.Add(\"test\", \"hello\");"
+  ],
+  "gameobject": [
+    "GameObject gObj = gameObject;",
+    "private void OnCollisionEnter(Collision col){\n    GameObject obj = col.gameObject;\n    Debug.Log(obj.name);\n}"
+  ],
+  "tuple": [
+    "Tuple<int, string, string> person = new Tuple <int, string, string>(1, \"Steve\", \"Jobs\");",
+    "var person = Tuple.Create(1, \"Steve\", \"Jobs\");",
+    "Tuple<T1, T2, T3, T4, T5, T6, T7, TRest>",
+    "var numbers = Tuple.Create(\"One\", 2, 3, \"Four\", 5, \"Six\", 7, 8);\nnumbers.Item1; // returns \"One\""
+  ],
+  "vector": [
+    "Vector2 vec = new Vector2() {90, 45};",
+    "Vector3 vec = new Vector2() {90, 45, 72};",
+    "Vector4 vec = new Vector2() {90, 45, 60, 25};"
+  ],
+  "quaternion": [
+    "Quaternion quat = new Quaternion() {pitch, yaw, roll, rotation around vector};",
+    "Quaternion quat = new Quaternion() {x, y, z, w};",
+    "Quaternion quat = new Quaternion() {1, 1, 1, 1};",
+    "Quaternion quat = new Quaternion() {0, .5f, .5f, .25f};",
+    "Quaternion quat = new Quaternion() {0, .5f, .5f, .25f};\nVector3 vec = quat.Euler(); // Allows you to get the angle"
+  ],
+  "pragma": [
+    "#pragma warning disable CS0168",
+    "#pragma warning restore warning-list",
+    "#pragma warning disable 414, CS3021",
+    "#pragma checksum \"filename\" \"{guid}\" \"checksum bytes\"",
+    "#pragma checksum \"filename\" \"{guid}\" \"checksum bytes\""
+  ],
+  "region": [
+    "#region MyClass definition\npublic class MyClass\n{\n    static void Main()\n    {\n    }\n}\n#endregion"
+  ],
+  "warning": [
+    "#warning Deprecated code in this method."
+  ],
+  "error": [
+    "#error Deprecated code in this method."
+  ],
+  "line": [
+    "class MainClass\n{\n    static void Main()\n    {\n#line 200 \"Special\"\n        int i;\n        int j;\n#line default\n        char c;\n        float f;\n#line hidden // numbering not affected\n        string s;\n        double d;\n    }\n}"
+  ],
+  "nullable": [
+    "#nullable disable",
+    "#nullable enable",
+    "#nullable restore",
+    "#nullable disable annotations",
+    "#nullable enable annotations",
+    "#nullable restore annotations",
+    "#nullable disable warnings",
+    "#nullable enable warnings",
+    "#nullable restore warnings"
+  ],
+  "if / elif / else / endif": [
+    "#if DEBUG\nConsole.WriteLine(\"Debug version\");\n#elif (DEBUG == false)\nConsole.WriteLine(\"Not Debug version\");\n#else\n// This is unreachable\n#endif"
+  ],
+  "define": [
+    "#define VC7\n//...\n#if debug\n    Console.WriteLine(\"Debug build\");\n#elif VC7\n    Console.WriteLine(\"Visual Studio 7\");\n#endif",
+    "#define MYTEST\nusing System;\npublic class MyClass\n{\n    static void Main()\n    {\n#if (DEBUG && !MYTEST)\n        Console.WriteLine(\"DEBUG is defined\");\n#elif (!DEBUG && MYTEST)\n        Console.WriteLine(\"MYTEST is defined\");\n#elif (DEBUG && MYTEST)\n        Console.WriteLine(\"DEBUG and MYTEST are defined\");  \n#else\n        Console.WriteLine(\"DEBUG and MYTEST are not defined\");\n#endif\n    }\n}",
+    "#define VERBOSE\n\n#if VERBOSE\n   Console.WriteLine(\"Verbose output version\");\n#endif"
   ]
 }
