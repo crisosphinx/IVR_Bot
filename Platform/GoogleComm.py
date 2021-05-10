@@ -68,22 +68,22 @@ class AttainGoogleDoc(object):
 
 
 class AttainGoogleClass(object):
-    def __init__(self, document_id=str()) -> None:
-        self.docuid = document_id
+    def __init__(self, _classname: str) -> None:
         self.scopes = [
             'https://www.googleapis.com/auth/classroom.courses.readonly',
             'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
             'https://www.googleapis.com/auth/classroom.topics.readonly',
         ]
+        self.classname = _classname
         self.courses = None
         self.service = None
         self.class_groupings = dict()
         self.topic_groupings = dict()
         self.class_rosters = list()
-
-    def __call__(self, _classname: str):
         self.course_info()
-        return self.get_class_work(_classname)
+
+    def __call__(self):
+        return self.get_class_work()
 
     def course_info(self):
         creds = None
@@ -140,8 +140,8 @@ class AttainGoogleClass(object):
 
         return [self.class_groupings, self.topic_groupings]
 
-    def get_class_work(self, class_name=str()):
-        a = self.query_info(class_name=class_name)
+    def get_class_work(self):
+        a = self.query_info(class_name=self.classname)
 
         _wrk_for_week = dict()
         for each in a[0]:
@@ -178,7 +178,7 @@ def main():
     Prints the names of the first 10 courses the user has access to.
     """
 
-    assignments = AttainGoogleClass()(_classname="R5 Universe: Introduction to Unity in 3D/VR")
+    assignments = AttainGoogleClass(_classname="R5 Universe: Introduction to Unity in 3D/VR")()
     return assignments
 
 

@@ -201,11 +201,6 @@ async def on_message(msg):
         else:
             await _author.send("Term could not be found.")
 
-        if _checkmsg.dm_check(msg):
-            pass
-        elif _checkmsg.non_bot(msg):
-            await msg.delete()
-
     elif _content.startswith(("!download", "?download")):
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
@@ -235,11 +230,6 @@ async def on_message(msg):
                     embed.description = "Download link to {0}.".format(each)
                 await _c.send(embed=embed)
 
-        if _checkmsg.dm_check(msg):
-            pass
-        elif _checkmsg.non_bot(msg):
-            await msg.delete()
-
     elif _content.startswith(("!website", "?website")):
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
@@ -260,11 +250,6 @@ async def on_message(msg):
                 embed.description = "Website link for {0}.".format(each)
                 await _c.send(embed=embed)
 
-        if _checkmsg.dm_check(msg):
-            pass
-        elif _checkmsg.non_bot(msg):
-            await msg.delete()
-
     elif _content.startswith(("!about", "?about")):
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
@@ -283,8 +268,8 @@ async def on_message(msg):
                 await _c.send(embed=embed)
 
     elif _content.lower().startswith("when is my next class? "):
-        _classname = _content.split("? ")[1]
-        _work = GoogleComm.AttainGoogleClass()(_classname)
+        _classname = _content.split("when is my next class? ")[1]
+        _work = GoogleComm.AttainGoogleClass(_classname)()
         # Perhaps... Separate the code below into a method elsewhere...? Let's ponder about what can be reused here...
         _week = list(_work.keys())[0]
         if _week != 'Complete':
@@ -296,9 +281,28 @@ async def on_message(msg):
 
         await ctx.send(_final_info)
 
+    elif _content.lower().startswith("!get example "):
+        _start = _content.split(" ")[0]
+        if _start.startswith("!"):
+            _c = bot_channel
+        else:
+            _c = _author
+
+        _get_example = _content.split("!get example ")[1].replace(" ", "")
+        _ex = Utilities.GetRandomExample()(_get_example)
+        if _ex:
+            _embed = Embed()
+            _embed.title = _get_example
+            _embed.description = _ex
+            await _c.send(embed=_embed)
+
     else:
         await client.process_commands(msg)
 
+    if _checkmsg.dm_check(msg):
+        pass
+    elif _checkmsg.non_bot(msg):
+        await msg.delete()
 
 @client.command(name="version", pass_context=True)
 async def version(ctx):

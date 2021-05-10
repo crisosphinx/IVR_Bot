@@ -3,6 +3,7 @@ import json
 import Documents
 import Settings
 import requests
+from random import randint
 from bs4 import BeautifulSoup as Bs
 
 
@@ -37,6 +38,17 @@ class SettingsRead(object):
 class SrcDir(object):
     def __init__(self):
         self.location = "{0}\\srcdir.json".format(
+            "\\".join(Documents.__file__.split("\\")[:-1])
+        )
+
+    def __call__(self) -> dict:
+        with open(self.location, 'r') as f:
+            return json.load(f)
+
+
+class ExamplesRead(object):
+    def __init__(self):
+        self.location = "{0}\\examples.json".format(
             "\\".join(Documents.__file__.split("\\")[:-1])
         )
 
@@ -225,6 +237,23 @@ class DefineWord(object):
                 if _identifier is not None and _identifier.string is not None:
                     _identifier = _identifier.string.replace(",", "")
                     self.defdict.setdefault(_identifier, []).append(_each.string)
+
+
+class GetRandomExample(object):
+    def __init__(self) -> None:
+        self.exread = ExamplesRead()()
+
+    def __call__(self, _word: str) -> str:
+        return self.select(_word)
+
+    def select(self, _word: str) -> str:
+        if _word in self.exread.keys():
+            _max = len(list(self.exread[_word]))
+            _get_random = randint(0, _max) - 1
+            if _max > 0:
+                return self.exread[_word][_get_random]
+            else:
+                return ""
 
 
 if __name__ == '__main__':

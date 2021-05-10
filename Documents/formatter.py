@@ -1,6 +1,6 @@
 from Documents.documentation import *
 import os
-# from Communications import classroomComm
+from Platform import GoogleComm
 
 
 def convert_to_output(week=str(), assignments=None) -> str:
@@ -52,15 +52,13 @@ def resolve_suffix(number=int()) -> str:
         return "{0}{1}".format(number, number_suffix[0])
 
 
-# def combine_roster():
-#     classes = classroomComm.CourseInfo().roster()
-#
-#     roster_info = """
-# Available courses ({0}):
-# {1}
-# """.format(classes[0], classes[1])
-#
-#     return roster_info
+def combine_roster(_classname: str):
+    classes = GoogleComm.AttainGoogleClass(_classname=_classname).roster()
+    roster_info = """
+Available courses ({0}):
+{1}
+""".format(classes[0], classes[1])
+    return roster_info
 
 
 def find_file(name=str()):
