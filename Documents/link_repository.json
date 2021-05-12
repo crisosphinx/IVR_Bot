@@ -17,7 +17,7 @@
   },
   "Downloads": {
       "FBXExporter": "https://github.com/crisosphinx/FBXExporterForUnity/archive/refs/heads/master.zip",
-      "AltSpaceUploader": "https://altvr.com/download-latest-unity-uploader/",
+      "AltSpaceUploader": "https://aka.ms/AsvrCommunityUploader",
       "2019.4.2 Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Win",
       "2019.4.2 Mac": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64630&os=Mac",
       "2018.4.34 Win": "https://unity3d.com/get-unity/download?thank-you=update&download_nid=64672&os=Win",
@@ -27,11 +27,13 @@
   "2019API": "https://docs.unity3d.com/2019.4/Documentation/ScriptReference/",
   "2020API": "https://docs.unity3d.com/2020.3/Documentation/ScriptReference/",
   "2021API": "https://docs.unity3d.com/2021.1/Documentation/ScriptReference/",
-  "AddFiles": "https://i.imgur.com/9AV0FMj.jpg",
-  "GoLive": "https://i.imgur.com/yVBkzDH.jpg",
-  "Help": "https://i.imgur.com/an2oa0V.jpg",
-  "Mic": "https://i.imgur.com/WAPncv5.jpg",
-  "Screens": "https://i.imgur.com/mwu7e82.jpg",
-  "ScreenShare": "https://i.imgur.com/QiVQTdz.jpg",
-  "MyLive": "https://i.imgur.com/rpJRLRc.jpg"
+  "images": {
+    "addfiles": "https://i.imgur.com/9AV0FMj.jpg",
+    "golive": "https://i.imgur.com/yVBkzDH.jpg",
+    "help": "https://i.imgur.com/an2oa0V.jpg",
+    "mic": "https://i.imgur.com/WAPncv5.jpg",
+    "screens": "https://i.imgur.com/mwu7e82.jpg",
+    "screenshare": "https://i.imgur.com/QiVQTdz.jpg",
+    "mylive": "https://i.imgur.com/rpJRLRc.jpg"
+  }
 }

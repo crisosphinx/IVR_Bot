@@ -73,6 +73,7 @@ class AttainGoogleClass(object):
             'https://www.googleapis.com/auth/classroom.courses.readonly',
             'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
             'https://www.googleapis.com/auth/classroom.topics.readonly',
+            "https://www.googleapis.com/auth/classroom.rosters.readonly"
         ]
         self.classname = _classname
         self.courses = None
@@ -116,10 +117,10 @@ class AttainGoogleClass(object):
 
         self.class_rosters = [" - {0}".format(x['name']) for x in self.courses]
 
-    def query_info(self, class_name=str()):
+    def query_info(self):
         course = None
         for each_class in self.courses:
-            if class_name == each_class['name']:
+            if self.classname == each_class['name']:
                 course = each_class
                 break
 
@@ -141,7 +142,7 @@ class AttainGoogleClass(object):
         return [self.class_groupings, self.topic_groupings]
 
     def get_class_work(self):
-        a = self.query_info(class_name=self.classname)
+        a = self.query_info()
 
         _wrk_for_week = dict()
         for each in a[0]:
@@ -169,6 +170,25 @@ class AttainGoogleClass(object):
             _work_due = _wrk_for_week
         return _work_due
 
+    def grades(self):
+        course = None
+        for each_class in self.courses:
+            if self.classname == each_class['name']:
+                course = each_class
+                break
+
+        course_id = course['id']
+        classes = self.service.courses().courseWork().list(courseId=course_id).execute()
+        students = self.service.courses().students().list(courseId=course_id).execute()
+        # for each_work in classes['courseWork']:
+        #     print(each_work)
+        for each in students['students']:
+            a = self.service.courses().courseWork().studentSubmissions().list(courseId=course_id, courseWorkId="-", userId=each['userId']).execute()
+            for assignment in a['studentSubmissions']:
+                if "assignedGrade" in assignment:
+                    print(assignment['assignedGrade'])
+                print(assignment)
+
     def roster(self):
         return [len(self.class_rosters), "\n".join(self.class_rosters)]
 
@@ -178,7 +198,7 @@ def main():
     Prints the names of the first 10 courses the user has access to.
     """
 
-    assignments = AttainGoogleClass(_classname="R5 Universe: Introduction to Unity in 3D/VR")()
+    assignments = AttainGoogleClass(_classname="TesterClass").grades()
     return assignments
 
 

@@ -25,7 +25,7 @@ class DocumentRoot(object):
 
 class JsonAttain(object):
     def __call__(self):
-        return Utilities.JsonRead()()
+        return Utilities.LinkRead()()
 
 
 class ExtractData(object):

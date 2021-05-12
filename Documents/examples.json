@@ -13,78 +13,78 @@
   "bool": [
     "bool a; // a is default false",
     "bool b = true; // b now equals true",
-    "bool test(){\n\t    bool a = true;\n    return a; // returns a boolean or true/false statement\n}"
+    "bool test(){\n\t    bool a = true;\n\treturn a; // returns a boolean or true/false statement\n}"
   ],
   "sbyte": [
     "sbyte value1 = -128;  // -128 is the highest number it can be",
     "sbyte value2 = 127;   // 127 is the highest number it can be",
-    "sbyte value3;         // Default value is 0",
-    "sbyte test(){\n    sbyte b = 255;\n    if (b < 128){\n        return b;\n    }\n    else {\n        return (sbyte)-128; // returns an signed byte\n    }\n}"
+    "sbyte value3;\t\t // Default value is 0",
+    "sbyte test(){\n\tsbyte b = 255;\n\tif (b < 128){\n\t\treturn b;\n\t}\n\telse {\n\t\treturn (sbyte)-128; // returns an signed byte\n\t}\n}"
   ],
   "byte": [
-    "byte value1;        // 0 is the default and the lowest number it can be",
+    "byte value1;\t\t// 0 is the default and the lowest number it can be",
     "byte value2 = 32;",
     "byte value3 = 255; // 255 is the highest number it can be",
-    "byte test(){\n    byte b = 255;\n    if (b < 256){\n        return b;\n    }\n    else {\n        return (byte)0; // returns an unsigned byte\n    }\n}"
+    "byte test(){\n\tbyte b = 255;\n\tif (b < 256){\n\t\treturn b;\n\t}\n\telse {\n\t\treturn (byte)0; // returns an unsigned byte\n\t}\n}"
   ],
   "int": [
     "int a; // 0 is default",
     "int b = -4;",
     "int c = 10000;",
-    "int test(){\n    int a = 10;\n    return a; // returns an integer\n}"
+    "int test(){\n\tint a = 10;\n\treturn a; // returns an integer\n}"
   ],
   "uint": [
     "uint a; // 0 is the lowest number you can have",
     "uint b = 84;",
     "uint c = 10000;",
-    "uint test(){\n    uint a; // this is equal to 0\n    return a; // returns an unsigned integer\n}"
+    "uint test(){\n\tuint a; // this is equal to 0\n\treturn a; // returns an unsigned integer\n}"
   ],
   "float": [
     "float a; // 0.0 is the default value",
     "float b = 1.0f;",
     "float c = -49.37f;",
     "float d = 101.0f;",
-    "float test(){\n    float a = -5.4f;\n    float b = 2f;\n    return a * b; // returns a float\n}"
+    "float test(){\n\tfloat a = -5.4f;\n\tfloat b = 2f;\n\treturn a * b; // returns a float\n}"
   ],
   "double": [
     "double a; // 0.0 or 0.00 is the default value",
     "double b = 0.00;",
     "double c = -5.6;",
     "double d = 510.36;",
-    "double test(){\n    double d = 0.00;\n    return d; // returns a double\n}"
+    "double test(){\n\tdouble d = 0.00;\n\treturn d; // returns a double\n}"
   ],
   "short": [
     "short a; // default is 0",
     "short b = -32768;",
     "short c = 32767;",
-    "short test(){\n    short s = -32768;\n    return s; // returns a short\n}"
+    "short test(){\n\tshort s = -32768;\n\treturn s; // returns a short\n}"
   ],
   "ushort": [
     "ushort a; // default 0 and is lowest number it can be",
     "ushort b = 0;",
     "ushort c = 65535;",
-    "ushort test(){\n    ushort s = 100;\n    return s; // returns an unsigned short\n}"
+    "ushort test(){\n\tushort s = 100;\n\treturn s; // returns an unsigned short\n}"
   ],
   "long": [
     "long a = -9223372036854775808; // lowest number it can be",
     "long b; // default is 0",
     "long c = 0;",
     "long d = 1923;",
-    "long test(){\n    long l = -29389503;\n    return l; // returns a long\n}\n"
+    "long test(){\n\tlong l = -29389503;\n\treturn l; // returns a long\n}\n"
   ],
   "ulong": [
     "ulong a = 18446744073709551615; // max it can go",
     "ulong b;",
     "ulong c = 2;",
     "ulong d = 1923;",
-    "ulong test(){\n    ulong l = -29389503;\n    return l; // returns a long\n}"
+    "ulong test(){\n\tulong l = -29389503;\n\treturn l; // returns a long\n}"
   ],
   "char": [
     "char z; // This equals to ''",
     "char a = 'a';",
     "char character = 'b';",
     "char hello = 'H';",
-    "char test(){\n    char a = 'H';\n    return a; // returns a character\n}"
+    "char test(){\n\tchar a = 'H';\n\treturn a; // returns a character\n}"
   ],
   "string": [
     "string a; // This equals to \"\"",
@@ -93,12 +93,12 @@
     "string literalString = @\"good morning\"; // a string literal",
     "string docs = @\"c:\\users\\user1\\documents\\a.txt\"; // \"c:\\\\users\\\\user1\\\\documents\\\\a.txt\"",
     "string quotes = @\"\"\"Ahoy matey!\"\" cried the captain.\" // \"Ahoy matey!\" cried the captain.",
-    "string test(){\n    string helloworld = \"hello world\";\n    return helloworld; // returns a string\n}"
+    "string test(){\n\tstring helloworld = \"hello world\";\n\treturn helloworld; // returns a string\n}"
   ],
   "dynamic": [
     "dynamic a = 0;",
     "dynamic d = \"a string\";",
-    "dynamic test(){\n    dynamic a = \"hello world\";\n    return a; // returns a string, in this case. But that string is through a dynamic.\n}"
+    "dynamic test(){\n\tdynamic a = \"hello world\";\n\treturn a; // returns a string, in this case. But that string is through a dynamic.\n}"
   ],
   "var": [
     "var a;",
@@ -107,7 +107,7 @@
     "var d = 1.5f;",
     "var e = -1.66;",
     "var f = 'g';",
-    "var test(){\n    var a = 1;\n    return a; // returns an integer in this case, but it is an integer through a dynamic variable.\n}"
+    "var test(){\n\tvar a = 1;\n\treturn a; // returns an integer in this case, but it is an integer through a dynamic variable.\n}"
   ],
   "object": [
     "object a;",
@@ -117,50 +117,51 @@
   ],
   "null": [
     "var a = null;",
-    "if (a == null){\n    Debug.Log(\"null object\");\n}"
+    "object obj = null;",
+    "if (a == null){\n\tDebug.Log(\"null object\");\n}"
   ],
   "decimal": [
     "decimal d;",
     "decimal a = 79228162512564337593543950335; // max high",
-    "decimal test(){\n    decimal d = 2.57493784956;\n    return decimal;\n}"
+    "decimal test(){\n\tdecimal d = 2.57493784956;\n\treturn decimal;\n}"
   ],
   "void": [
-    "void test(){\n    return null;\n}"
+    "void test(){\n\treturn null;\n}"
   ],
   "class": [
     "MyClass mc = new MyClass();",
-    "public class MyClass{\n    void test(){\n         return null;\n    }\n}"
+    "public class MyClass{\n\tvoid test(){\n\t\t return null;\n\t}\n}"
   ],
   "return": [
     "return 0; // must be used in a function / method or a loop",
-    "void test(){\n     return null;\n }"
+    "void test(){\n\t return null;\n }"
   ],
   "break": [
-    "for (int i = 0; i < 10; i++){\n    if (i == 1){\n        break; // instantly breaks the loop after the first two integers and must be used in a loop.\n    }\n}"
+    "for (int i = 0; i < 10; i++){\n\tif (i == 1){\n\t\tbreak; // instantly breaks the loop after the first two integers and must be used in a loop.\n\t}\n}"
   ],
   "if": [
-    "bool b = true;\nif (b){\n    Debug.Log(true);\n}"
+    "bool b = true;\nif (b){\n\tDebug.Log(true);\n}"
   ],
   "else": [
-    "bool b = false;\nif (b){\n    Debug.Log(true);\n}\nelse {\n    Debug.Log(false);\n}"
+    "bool b = false;\nif (b){\n\tDebug.Log(true);\n}\nelse {\n\tDebug.Log(false);\n}"
   ],
   "do / while": [
-    "int n = 0;\ndo {\n    Debug.Log(n);\n    n++;\n}\nwhile (n < 4);"
+    "int n = 0;\ndo {\n\tDebug.Log(n);\n\tn++;\n}\nwhile (n < 4);"
   ],
   "foreach": [
-    "var names = new List<String> {\"Felicia\", \"Ragnorak\", \"Sam\", \"Maria\", \"Trevor\", \"Shiva\"};\nforeach (string name in names){\n    Debug.Log($\",\"Hello {name.ToString()}!\");\n}"
+    "var names = new List<String> {\"Felicia\", \"Ragnorak\", \"Sam\", \"Maria\", \"Trevor\", \"Shiva\"};\nforeach (string name in names){\n\tDebug.Log($\",\"Hello {name.ToString()}!\");\n}"
   ],
   "for": [
-    "for (int i = 0; i < 10; i++){\n    Debug.Log(i.ToString());\n}"
+    "for (int i = 0; i < 10; i++){\n\tDebug.Log(i.ToString());\n}"
   ],
   "switch": [
-    "int switchCase = 1;\nswitch (switchCase){\n    case 0:\n        Debug.Log(\"Case 0\");\n        break;\n    case 1:\n        Debug.Log(\"Case 1\");\n        break;\n    case 2:\n        Debug.Log(\"Case 2\");\n        break;\n    default:\n        Debug.Log(\"Case \\\\\"Default\\\\\"\");\n        break;\n}"
+    "int switchCase = 1;\nswitch (switchCase){\n\tcase 0:\n\t\tDebug.Log(\"Case 0\");\n\t\tbreak;\n\tcase 1:\n\t\tDebug.Log(\"Case 1\");\n\t\tbreak;\n\tcase 2:\n\t\tDebug.Log(\"Case 2\");\n\t\tbreak;\n\tdefault:\n\t\tDebug.Log(\"Case \\\\\"Default\\\\\"\");\n\t\tbreak;\n}"
   ],
   "try / catch / finally": [
-    "static void Main(){\n    int n;\n    try {\n        // Do not initialize this variable here.\n        n = 123;\n    }\n    catch {\n    }\n    finally {\n        // Error: Use of unassigned local variable 'n'.\n        Console.Write(n);\n    }\n}"
+    "static void Main(){\n\tint n;\n\ttry {\n\t\t// Do not initialize this variable here.\n\t\tn = 123;\n\t}\n\tcatch {\n\t}\n\tfinally {\n\t\t// Error: Use of unassigned local variable 'n'.\n\t\tConsole.Write(n);\n\t}\n}"
   ],
   "throw": [
-    "class ThrowTest3\n{\n    static void ProcessString(string s)\n    {\n        if (s == null)\n        {\n            throw new ArgumentNullException();\n        }\n    }\n    public static void Main()\n    {\n        try\n        {\n            string s = null;\n            ProcessString(s);\n        }\n        // Most specific:\n        catch (ArgumentNullException e)\n        {\n            Console.WriteLine(\"{0} First exception caught.\", e);\n        }\n        // Least specific:\n        catch (Exception e)\n        {\n            Console.WriteLine(\"{0} Second exception caught.\", e);\n        }\n    }\n}"
+    "class ThrowTest3\n{\n\tstatic void ProcessString(string s)\n\t{\n\t\tif (s == null)\n\t\t{\n\t\t\tthrow new ArgumentNullException();\n\t\t}\n\t}\n\tpublic static void Main()\n\t{\n\t\ttry\n\t\t{\n\t\t\tstring s = null;\n\t\t\tProcessString(s);\n\t\t}\n\t\t// Most specific:\n\t\tcatch (ArgumentNullException e)\n\t\t{\n\t\t\tConsole.WriteLine(\"{0} First exception caught.\", e);\n\t\t}\n\t\t// Least specific:\n\t\tcatch (Exception e)\n\t\t{\n\t\t\tConsole.WriteLine(\"{0} Second exception caught.\", e);\n\t\t}\n\t}\n}"
   ],
   "public": [
     "public class MyClass(){\n}",
@@ -171,26 +172,26 @@
     "private float a; // creates a privately accessible float variable \"a\""
   ],
   "struct": [
-    "struct Coordinate\n{\n    public int x;\n    public int y;\n}\nCoordinate point = new Coordinate();\nDebug.Log(point.x);  // prints 0\nDebug.Log(point.y);  // prints 0"
+    "struct Coordinate\n{\n\tpublic int x;\n\tpublic int y;\n}\nCoordinate point = new Coordinate();\nDebug.Log(point.x);  // prints 0\nDebug.Log(point.y);  // prints 0"
   ],
   "static": [
-    "static void Main(){\n    // Add your code here\n};",
-    "private static void Main(){\n    // Add your code here\n};",
-    "public static void Main(){\n    // Add your code here\n};",
+    "static void Main(){\n\t// Add your code here\n};",
+    "private static void Main(){\n\t// Add your code here\n};",
+    "public static void Main(){\n\t// Add your code here\n};",
     "private static bool = false;"
   ],
   "abstract": [
-    "abstract class Animal\n{\n    public abstract void animalSound();\n    public void sleep()\n    {\n        Debug.Log(\"zzz\");\n    }\n}\nAnimal myObj = new Animal(); // Will generate an error because this cannot create an instance of an abstract class or interface."
+    "abstract class Animal\n{\n\tpublic abstract void animalSound();\n\tpublic void sleep()\n\t{\n\t\tDebug.Log(\"zzz\");\n\t}\n}\nAnimal myObj = new Animal(); // Will generate an error because this cannot create an instance of an abstract class or interface."
   ],
   "interface": [
-    "interface Animal\n{\n    void animalSound(); // interface method (does not have a body)\n    void run(); // another interface method (does not have a body)\n}",
-    "interface Animal\n{\n    void animalSound();\n}\n\nclass Pig : Animal\n{\n     public void animalSound()\n     {\n         Debug.Log(\"The pig says: \\\"squeal squeal\\\"!\");\n     }\n}\n\nclass Program\n{\n    static void Main(string[] args)\n    {\n        Pig myPig = new Pig(); // creates a pig object\n        myPig.animalSound(); // should squeal!\n    }\n}"
+    "interface Animal\n{\n\tvoid animalSound(); // interface method (does not have a body)\n\tvoid run(); // another interface method (does not have a body)\n}",
+    "interface Animal\n{\n\tvoid animalSound();\n}\n\nclass Pig : Animal\n{\n\t public void animalSound()\n\t {\n\t\t Debug.Log(\"The pig says: \\\"squeal squeal\\\"!\");\n\t }\n}\n\nclass Program\n{\n\tstatic void Main(string[] args)\n\t{\n\t\tPig myPig = new Pig(); // creates a pig object\n\t\tmyPig.animalSound(); // should squeal!\n\t}\n}"
   ],
   "virtual": [
-    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(\"Hello! This is a Base Class!\");\n    }\n}"
+    "class A\n{\n\tpublic virtual void show()\n\t{\n\t\t Debug.Log(\"Hello! This is a Base Class!\");\n\t}\n}"
   ],
   "override": [
-    "class A\n{\n    public virtual void show()\n    {\n         Debug.Log(\"Hello! This is a Base Class!\");\n    }\n}\n\n// Derived Class\nclass B : A // In our projects, we use \"MonoBehaviour\" as our base class\n{\n    public override void show()\n    {\n        Debug.Log(\"Hello! This is a Derived Class!\");\n    }\n}"
+    "class A\n{\n\tpublic virtual void show()\n\t{\n\t\t Debug.Log(\"Hello! This is a Base Class!\");\n\t}\n}\n\n// Derived Class\nclass B : A // In our projects, we use \"MonoBehaviour\" as our base class\n{\n\tpublic override void show()\n\t{\n\t\tDebug.Log(\"Hello! This is a Derived Class!\");\n\t}\n}"
   ],
   "new": [
     "MyClass mc = new MyClass();",
@@ -206,7 +207,7 @@
   ],
   "namespace": [
     "namespace DocLoader{\n// Define an alias for the nested namespace}",
-    "namespace PC{\n    // Define an alias for the nested namespace.\n    using Project = PC.MyCompany.Project;\n    class A{\n        void M()\n        {\n            // Use the alias\n            var mc = new Project.MyClass();\n        }\n    }\n    namespace MyCompany{\n        namespace Project{\n            public class MyClass { }\n        }\n    }\n}"
+    "namespace PC{\n\t// Define an alias for the nested namespace.\n\tusing Project = PC.MyCompany.Project;\n\tclass A{\n\t\tvoid M()\n\t\t{\n\t\t\t// Use the alias\n\t\t\tvar mc = new Project.MyClass();\n\t\t}\n\t}\n\tnamespace MyCompany{\n\t\tnamespace Project{\n\t\t\tpublic class MyClass { }\n\t\t}\n\t}\n}"
   ],
   "using": [
     "using System;",
@@ -221,7 +222,7 @@
     "char t = 'R';"
   ],
   "!": [
-    "if (!a){\n    //do something\n}",
+    "if (!a){\n\t//do something\n}",
     "bool b = true;\nb = !b; //reverses or changes the boolean \"b\" to false instead of true"
   ],
   "+": [
@@ -249,12 +250,12 @@
     "int a = 2;\na = a % 2; // this equals 0"
   ],
   "<": [
-    "int i = 3;\nif (i < 10){\n    Debug.Log(true);\n}",
-    "float f = 0.3f;\nif (10 < f){\n    Debug.Log(false);\n}"
+    "int i = 3;\nif (i < 10){\n\tDebug.Log(true);\n}",
+    "float f = 0.3f;\nif (10 < f){\n\tDebug.Log(false);\n}"
   ],
   ">": [
-    "int i = 3;\n while (i > 0){\n    Debug.Log(i.ToString());\n    i--;}",
-    "double d = 10.67;\n if (d > 0){\n    Debug.Log(d.ToString());\n}"
+    "int i = 3;\n while (i > 0){\n\tDebug.Log(i.ToString());\n\ti--;}",
+    "double d = 10.67;\n if (d > 0){\n\tDebug.Log(d.ToString());\n}"
   ],
   "^": [
     "Debug.Log(true ^ true);    // output: false",
@@ -278,26 +279,26 @@
     "int a = 0;\nbool b = true;\nwhile (a < 100 && b){\nb = false;\n}"
   ],
   "||": [
-    "if (1 < 0 || 0 == 0)\n{\n    Debug.Log(\"true\");\n    // this prints true, because 0 is equal to 0\n}",
-    "if (-1 < 0 || 1 == 0)\n{\n    Debug.Log(\"true\");\n    // this prints true, because -1 is less than 0\n}"
+    "if (1 < 0 || 0 == 0)\n{\n\tDebug.Log(\"true\");\n\t// this prints true, because 0 is equal to 0\n}",
+    "if (-1 < 0 || 1 == 0)\n{\n\tDebug.Log(\"true\");\n\t// this prints true, because -1 is less than 0\n}"
   ],
   "==": [
-    "if (0 == 0){\n    Debug.Log(true);  // Prints true\n}",
-    "if (1 == 0){\n    Debug.Log(true);\n}\nelse{\n    Debug.Log(false); // Prints false\n}"
+    "if (0 == 0){\n\tDebug.Log(true);  // Prints true\n}",
+    "if (1 == 0){\n\tDebug.Log(true);\n}\nelse{\n\tDebug.Log(false); // Prints false\n}"
   ],
   "!=": [
-    "if (0 != 0){\n    Debug.Log(true);  // is true\n}\nelse{\n    Debug.Log(false); // Prints false\n}",
-    "if (100 != 0){\n    Debug.Log(true);  // is true\n}\nelse{\n    Debug.Log(false); // Prints true\n}"
+    "if (0 != 0){\n\tDebug.Log(true);  // is true\n}\nelse{\n\tDebug.Log(false); // Prints false\n}",
+    "if (100 != 0){\n\tDebug.Log(true);  // is true\n}\nelse{\n\tDebug.Log(false); // Prints true\n}"
   ],
   ">=": [
-    "if (2.3 >= 2){\n    Debug.Log(true); // This will print true due to 2.3 being greater than or equal to 2.0\n}",
-    "if (100 >= -200){\n    Debug.Log(true); // This will print true due to 100 being greater than or equal to -200\n}",
-    "if (10 >= 200){\n    Debug.Log(true);\n}\nelse{\n    Debug.Log(false); // This will print false, because 10 is less than 200\n}"
+    "if (2.3 >= 2){\n\tDebug.Log(true); // This will print true due to 2.3 being greater than or equal to 2.0\n}",
+    "if (100 >= -200){\n\tDebug.Log(true); // This will print true due to 100 being greater than or equal to -200\n}",
+    "if (10 >= 200){\n\tDebug.Log(true);\n}\nelse{\n\tDebug.Log(false); // This will print false, because 10 is less than 200\n}"
   ],
   "<=": [
-    "if (0 <= 1){\n    Debug.Log(true); // This will print true due to 0 being less than or equal to 1.\n}",
-    "if (1 <= 1){\n    Debug.Log(true); // This will print true due to 1 being less than or equal to 1.\n}",
-    "if (3 <= 1){\n    Debug.Log(true); // This will not do anything. 3 is greater than 1.\n}"
+    "if (0 <= 1){\n\tDebug.Log(true); // This will print true due to 0 being less than or equal to 1.\n}",
+    "if (1 <= 1){\n\tDebug.Log(true); // This will print true due to 1 being less than or equal to 1.\n}",
+    "if (3 <= 1){\n\tDebug.Log(true); // This will not do anything. 3 is greater than 1.\n}"
   ],
   "<<": [
     "byte a;\na = 1 << 3;\nDebug.Log(a); // Prints 8, as we are bitwise shifting 1 to the left 3 bytes",
@@ -310,21 +311,21 @@
   "+=": [
     "int a = 0;\na += 1; // \"a\" now equals 1.\nDebug.Log(a);",
     "float a = 3.2f;\na += 1.05f; // \"a\" now equals 4.25.\nDebug.Log(a);",
-    "int a = 0;\nwhile (a < 10){\n    Debug.Log(a);\n    a += 1;\n}"
+    "int a = 0;\nwhile (a < 10){\n\tDebug.Log(a);\n\ta += 1;\n}"
   ],
   "-=": [
     "int a = 0;\na -= 1; // \"a\" now equals -1\nDebug.Log(a);",
     "float a = 200.4f;\na -= 200f; // \"a\" now equals .4\nDebug.Log(a);",
-    "float a = 20f;\nwhile (a > 10){\n    Debug.Log(a);\n    a -= .1;\n}"
+    "float a = 20f;\nwhile (a > 10){\n\tDebug.Log(a);\n\ta -= .1;\n}"
   ],
   "*=": [
     "int g = 1;\ng *= 1; // \"g\" still equals 1",
     "float g = -1f;\ng *= -1f; // \"g\" equals 1, not -1",
-    "int a = 2;\nwhile (a < 100){\n    Debug.Log(a);\n    a *= 5;\n}"
+    "int a = 2;\nwhile (a < 100){\n\tDebug.Log(a);\n\ta *= 5;\n}"
   ],
   "/=": [
     "int i = 50;\ni /= 2;  // this is the same as  i = i / 2;\nDebug.Log(i); // prints 25 to the debug menu",
-    "int a = 200;\nwhile (a > 0){\n    Debug.Log(a);\n    a /= 2;\n}"
+    "int a = 200;\nwhile (a > 0){\n\tDebug.Log(a);\n\ta /= 2;\n}"
   ],
   "|=": [
     "uint a = 0b_1111_1000;\na |= 0b_0011_0001;\nDebug.Log(a);  // output: 10111001"
@@ -345,7 +346,7 @@
   ],
   "++": [
     "int i = 0;\ni++;",
-    "int a = 0;\nwhile(a < 10){\n    a++;\n}"
+    "int a = 0;\nwhile(a < 10){\n\ta++;\n}"
   ],
   "--": [
     "int i = 0;\ni--;"
@@ -386,7 +387,7 @@
   ],
   "gameobject": [
     "GameObject gObj = gameObject;",
-    "private void OnCollisionEnter(Collision col){\n    GameObject obj = col.gameObject;\n    Debug.Log(obj.name);\n}"
+    "private void OnCollisionEnter(Collision col){\n\tGameObject obj = col.gameObject;\n\tDebug.Log(obj.name);\n}"
   ],
   "tuple": [
     "Tuple<int, string, string> person = new Tuple <int, string, string>(1, \"Steve\", \"Jobs\");",
@@ -414,7 +415,7 @@
     "#pragma checksum \"filename\" \"{guid}\" \"checksum bytes\""
   ],
   "region": [
-    "#region MyClass definition\npublic class MyClass\n{\n    static void Main()\n    {\n    }\n}\n#endregion"
+    "#region MyClass definition\npublic class MyClass\n{\n\tstatic void Main()\n\t{\n\t}\n}\n#endregion"
   ],
   "warning": [
     "#warning Deprecated code in this method."
@@ -423,7 +424,7 @@
     "#error Deprecated code in this method."
   ],
   "line": [
-    "class MainClass\n{\n    static void Main()\n    {\n#line 200 \"Special\"\n        int i;\n        int j;\n#line default\n        char c;\n        float f;\n#line hidden // numbering not affected\n        string s;\n        double d;\n    }\n}"
+    "class MainClass\n{\n\tstatic void Main()\n\t{\n#line 200 \"Special\"\n\t\tint i;\n\t\tint j;\n#line default\n\t\tchar c;\n\t\tfloat f;\n#line hidden // numbering not affected\n\t\tstring s;\n\t\tdouble d;\n\t}\n}"
   ],
   "nullable": [
     "#nullable disable",
@@ -440,8 +441,8 @@
     "#if DEBUG\nConsole.WriteLine(\"Debug version\");\n#elif (DEBUG == false)\nConsole.WriteLine(\"Not Debug version\");\n#else\n// This is unreachable\n#endif"
   ],
   "define": [
-    "#define VC7\n//...\n#if debug\n    Console.WriteLine(\"Debug build\");\n#elif VC7\n    Console.WriteLine(\"Visual Studio 7\");\n#endif",
-    "#define MYTEST\nusing System;\npublic class MyClass\n{\n    static void Main()\n    {\n#if (DEBUG && !MYTEST)\n        Console.WriteLine(\"DEBUG is defined\");\n#elif (!DEBUG && MYTEST)\n        Console.WriteLine(\"MYTEST is defined\");\n#elif (DEBUG && MYTEST)\n        Console.WriteLine(\"DEBUG and MYTEST are defined\");  \n#else\n        Console.WriteLine(\"DEBUG and MYTEST are not defined\");\n#endif\n    }\n}",
+    "#define VC7\n//...\n#if debug\n\tConsole.WriteLine(\"Debug build\");\n#elif VC7\n\tConsole.WriteLine(\"Visual Studio 7\");\n#endif",
+    "#define MYTEST\nusing System;\npublic class MyClass\n{\n\tstatic void Main()\n\t{\n#if (DEBUG && !MYTEST)\n\t\tConsole.WriteLine(\"DEBUG is defined\");\n#elif (!DEBUG && MYTEST)\n\t\tConsole.WriteLine(\"MYTEST is defined\");\n#elif (DEBUG && MYTEST)\n\t\tConsole.WriteLine(\"DEBUG and MYTEST are defined\");  \n#else\n\t\tConsole.WriteLine(\"DEBUG and MYTEST are not defined\");\n#endif\n\t}\n}",
     "#define VERBOSE\n\n#if VERBOSE\n   Console.WriteLine(\"Verbose output version\");\n#endif"
   ]
 }

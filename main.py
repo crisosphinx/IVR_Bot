@@ -37,6 +37,31 @@ async def retrieve_channel(ctx, requested_channel: str) -> channel:
                 return None
 
 
+async def retrieve_roles(_user=None) -> list:
+    """
+    Retrieves the authors roles in a list format with only names listed.
+    :param _user: Passed user to get roles from and return
+    :return:
+    """
+    _roles = _user.roles
+    return [x.name for x in _roles]
+
+
+async def test_instructor(ctx) -> bool:
+    """
+    User has enquired about receiving help. User will attain all possible info.
+    :param ctx: Passed context in which a message was sent.
+    :return:
+    """
+    _author = ctx.author
+    _roles = await retrieve_roles(_author)
+    if (
+        "Instructor" in _roles or
+        "Teacher" in _roles
+    ):
+        return True
+
+
 class CheckMsg(object):
     def __init__(self, ctx=None, authid=None) -> None:
         """
@@ -128,13 +153,16 @@ async def on_message(msg):
             _ret.append("\n".join(item))
         return _ret
 
-    if _content.lower().startswith(("?def", "!def")):
+    if _checkmsg.dm_check(msg):
+        _c = _author
+    else:
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
             _c = bot_channel
         else:
             _c = _author
 
+    if _content.lower().startswith(("?def", "!def")):
         _msg = "".join(_content.split(" ")[1:])
         _return = Utilities.DefinitionUnity(_msg)(True)
         if _return:
@@ -202,13 +230,7 @@ async def on_message(msg):
             await _author.send("Term could not be found.")
 
     elif _content.startswith(("!download", "?download")):
-        _start = _content.split(" ")[0]
-        if _start.startswith("!"):
-            _c = bot_channel
-        else:
-            _c = _author
-
-        _dls = Utilities.JsonRead()()["Downloads"]
+        _dls = Utilities.LinkRead()()["Downloads"]
         _get = "".join(_content.split(" ")[1:])
         for each in list(_dls.keys()):
             if _get.lower() in each.lower():
@@ -231,12 +253,7 @@ async def on_message(msg):
                 await _c.send(embed=embed)
 
     elif _content.startswith(("!website", "?website")):
-        _start = _content.split(" ")[0]
-        if _start.startswith("!"):
-            _c = bot_channel
-        else:
-            _c = _author
-        _web = Utilities.JsonRead()()["Websites"]
+        _web = Utilities.LinkRead()()["Websites"]
         _get = "".join(_content.split(" ")[1:])
         for each in list(_web.keys()):
             if _get.lower() == each.lower():
@@ -251,12 +268,7 @@ async def on_message(msg):
                 await _c.send(embed=embed)
 
     elif _content.startswith(("!about", "?about")):
-        _start = _content.split(" ")[0]
-        if _start.startswith("!"):
-            _c = bot_channel
-        else:
-            _c = _author
-        _teach = Utilities.JsonRead()()["Instructors"]
+        _teach = Utilities.LinkRead()()["Instructors"]
         _get = "".join(_content.split(" ")[1:])
         for each in list(_teach.keys()):
             if _get.lower() == each.lower():
@@ -282,12 +294,6 @@ async def on_message(msg):
         await ctx.send(_final_info)
 
     elif _content.lower().startswith("!get example "):
-        _start = _content.split(" ")[0]
-        if _start.startswith("!"):
-            _c = bot_channel
-        else:
-            _c = _author
-
         _get_example = _content.split("!get example ")[1].replace(" ", "")
         _ex = Utilities.GetRandomExample()(_get_example)
         if _ex:
@@ -296,13 +302,41 @@ async def on_message(msg):
             _embed.description = _ex
             await _c.send(embed=_embed)
 
+    elif _content.lower().startswith(("!show ", "?show ")):
+        _info = _content.split(" ")[1].replace(" ", "")
+        _images = Utilities.LinkRead()()['images']
+        _embed = Embed()
+        _embed.set_image(url=_images[_info])
+        _embed.title = "Instructions"
+        await _c.send(embed=_embed)
+
     else:
         await client.process_commands(msg)
 
-    if _checkmsg.dm_check(msg):
-        pass
-    elif _checkmsg.non_bot(msg):
-        await msg.delete()
+    if msg.content.startswith(("!", "?")):
+        if _checkmsg.dm_check(msg):
+            pass
+        elif _checkmsg.non_bot(msg):
+            await msg.delete()
+
+
+@client.command(name="addinstructor", pass_context=True)
+async def addinstructor(ctx):
+    _msg = ctx.message.content.split("addinstructor ")[1]
+    _name = _msg.split(" ")[0]
+    _link = " ".join(_msg.split(" ")[1:])
+    if await test_instructor(ctx):
+        Utilities.LinkWrite(_name=_name, _example=_link)()
+
+
+@client.command(name="addexample", pass_context=True)
+async def addexample(ctx):
+    _msg = ctx.message.content.split("addexample ")[1]
+    _name = _msg.split(" ")[0]
+    _example = " ".join(_msg.split(" ")[1:])
+    if await test_instructor(ctx):
+        Utilities.ExamplesWrite(_name=_name, _example=_example)()
+
 
 @client.command(name="version", pass_context=True)
 async def version(ctx):

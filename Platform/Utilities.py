@@ -7,9 +7,9 @@ from random import randint
 from bs4 import BeautifulSoup as Bs
 
 
-class JsonRead(object):
+class LinkRead(object):
     def __init__(self) -> None:
-        self.doc = "{0}\\link_repository.json".format(
+        self.location = "{0}\\link_repository.json".format(
             "\\".join(Documents.__file__.split("\\")[:-1])
         )
 
@@ -17,8 +17,21 @@ class JsonRead(object):
         return self.run()
 
     def run(self) -> dict:
-        with open(self.doc, 'r') as f:
+        with open(self.location, 'r') as f:
             return json.load(f)
+
+
+class LinkWrite(object):
+    def __init__(self, _name: str, _example: str) -> None:
+        self.location = "{0}\\link_repository.json".format(
+            "\\".join(Documents.__file__.split("\\")[:-1])
+        )
+        self.json = LinkRead()()
+        self.json[_name].append(_example)
+
+    def __call__(self) -> None:
+        with open(self.location, 'r+') as f:
+            json.dump(self.json, f)
 
 
 class SettingsRead(object):
@@ -57,6 +70,19 @@ class ExamplesRead(object):
             return json.load(f)
 
 
+class ExamplesWrite(object):
+    def __init__(self, _name: str, _example: str) -> None:
+        self.location = "{0}\\examples.json".format(
+            "\\".join(Documents.__file__.split("\\")[:-1])
+        )
+        self.json = ExamplesRead()()
+        self.json[_name].append(_example)
+
+    def __call__(self) -> None:
+        with open(self.location, 'r+') as f:
+            json.dump(self.json, f)
+
+
 class Token(object):
     def __init__(self) -> None:
         """
@@ -93,7 +119,7 @@ class Token(object):
 class DefinitionUnity(object):
     def __init__(self, _query=str()) -> None:
         self.search_query = _query
-        self.unitydocs = JsonRead()()["2018API"]
+        self.unitydocs = LinkRead()()["2018API"]
         self.soup = None
 
     def __call__(self, embed: bool) -> list or str or bool:
@@ -205,7 +231,7 @@ class DefinitionUnity(object):
 class DefineWord(object):
     def __init__(self) -> None:
         self.soup = None
-        self.define = JsonRead()()["Websites"]["Define"]
+        self.define = LinkRead()()["Websites"]["Define"]
         self.word = str()
         self.link = str()
         self.defdict = {
