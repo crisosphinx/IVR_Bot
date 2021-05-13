@@ -310,6 +310,17 @@ async def on_message(msg):
         _embed.title = "Instructions"
         await _c.send(embed=_embed)
 
+    elif _content.lower().startswith("?grade "):
+        _info = _content.split(" ")[1]
+        await _author.send("Please enter name as it appears in Google Classroom: ")
+        _name = await client.wait_for("message", check=CheckMsg().non_bot)
+        _get_grades = GoogleComm.AttainGoogleClass(_classname=_info).grades()
+        for _assignment in _get_grades[_name.content]:
+            _embed = Embed()
+            _embed.title = _assignment
+            _embed.description = _get_grades[_name.content][_assignment]
+            await ctx.send(embed=_embed)
+
     else:
         await client.process_commands(msg)
 

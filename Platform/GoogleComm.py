@@ -10,6 +10,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from Platform import Utilities
 
+DEBUG = Utilities.SettingsRead()()['DEBUG']
+
 
 class AttainGoogleDoc(object):
     def __init__(self, document_id=str()) -> None:
@@ -170,7 +172,8 @@ class AttainGoogleClass(object):
             _work_due = _wrk_for_week
         return _work_due
 
-    def grades(self):
+    def grades(self) -> dict:
+        _grade_dict = dict()
         course = None
         for each_class in self.courses:
             if self.classname == each_class['name']:
@@ -180,16 +183,38 @@ class AttainGoogleClass(object):
         course_id = course['id']
         classes = self.service.courses().courseWork().list(courseId=course_id).execute()
         students = self.service.courses().students().list(courseId=course_id).execute()
-        # for each_work in classes['courseWork']:
-        #     print(each_work)
-        for each in students['students']:
-            a = self.service.courses().courseWork().studentSubmissions().list(courseId=course_id, courseWorkId="-", userId=each['userId']).execute()
-            for assignment in a['studentSubmissions']:
-                if "assignedGrade" in assignment:
-                    print(assignment['assignedGrade'])
-                print(assignment)
 
-    def roster(self):
+        _title = str()
+        _max = str()
+        _workid = str()
+
+        for each_work in classes['courseWork']:
+            _max = each_work['maxPoints']
+            _title = each_work['title']
+            _workid = each_work['id']
+
+            for each in students['students']:
+                a = self.service.courses().courseWork().studentSubmissions().list(
+                    courseId=course_id,
+                    courseWorkId=_workid,
+                    userId=each['userId']
+                ).execute()
+
+                for assignment in a['studentSubmissions']:
+                    _name = each['profile']['name']['fullName']
+                    if "assignedGrade" in assignment:
+                        if DEBUG:
+                            print("{0}\n--------\n{1}\n{2}/{3}".format(
+                                _name,
+                                _title,
+                                assignment['assignedGrade'],
+                                _max
+                            ))
+                        _info = {_title: "{0}/{1}".format(assignment['assignedGrade'], _max)}
+                        _grade_dict.setdefault(_name, _info)
+        return _grade_dict
+
+    def roster(self) -> list:
         return [len(self.class_rosters), "\n".join(self.class_rosters)]
 
 
