@@ -232,52 +232,61 @@ async def on_message(msg):
     elif _content.startswith(("!download", "?download")):
         _dls = Utilities.LinkRead()()["Downloads"]
         _get = "".join(_content.split(" ")[1:])
-        for each in list(_dls.keys()):
-            if _get.lower() in each.lower():
-                _download = _dls[each]
-                if "." in _get:
-                    _year, _edition, _type = each.split(".")
-                    _ver = _type.split(" ")[0]
-                    _type = _type.split(" ")[1]
-                    embed = Embed()
-                    embed.url = _download
-                    embed.title = "{0}.{1}.{2} {3} Download".format(_year, _edition, _ver, _type)
-                    embed.description = "Link to the UnityHub {0}.{1}.{2}f1 {3} download.".format(
-                        _year, _edition, _ver, _type
-                    )
-                else:
-                    embed = Embed()
-                    embed.url = _download
-                    embed.title = each
-                    embed.description = "Download link to {0}.".format(each)
-                await _c.send(embed=embed)
+        if _get.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_dls.keys())) + "```")
+        else:
+            for each in list(_dls.keys()):
+                if _get.lower() in each.lower():
+                    _download = _dls[each]
+                    if "." in _get:
+                        _year, _edition, _type = each.split(".")
+                        _ver = _type.split(" ")[0]
+                        _type = _type.split(" ")[1]
+                        embed = Embed()
+                        embed.url = _download
+                        embed.title = "{0}.{1}.{2} {3} Download".format(_year, _edition, _ver, _type)
+                        embed.description = "Link to the UnityHub {0}.{1}.{2}f1 {3} download.".format(
+                            _year, _edition, _ver, _type
+                        )
+                    else:
+                        embed = Embed()
+                        embed.url = _download
+                        embed.title = each
+                        embed.description = "Download link to {0}.".format(each)
+                    await _c.send(embed=embed)
 
     elif _content.startswith(("!website", "?website")):
         _web = Utilities.LinkRead()()["Websites"]
         _get = "".join(_content.split(" ")[1:])
-        for each in list(_web.keys()):
-            if _get.lower() == each.lower():
-                if "Intro" in each or "Compendium" in each:
-                    _website = "https://docs.google.com/document/d/{0}".format(_web[each])
-                else:
-                    _website = _web[each]
-                embed = Embed()
-                embed.url = _website
-                embed.title = each
-                embed.description = "Website link for {0}.".format(each)
-                await _c.send(embed=embed)
+        if _get.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_web.keys())))
+        else:
+            for each in list(_web.keys()):
+                if _get.lower() == each.lower():
+                    if "Intro" in each or "Compendium" in each:
+                        _website = "https://docs.google.com/document/d/{0}".format(_web[each])
+                    else:
+                        _website = _web[each]
+                    embed = Embed()
+                    embed.url = _website
+                    embed.title = each
+                    embed.description = "Website link for {0}.".format(each)
+                    await _c.send(embed=embed)
 
     elif _content.startswith(("!about", "?about")):
         _teach = Utilities.LinkRead()()["Instructors"]
         _get = "".join(_content.split(" ")[1:])
-        for each in list(_teach.keys()):
-            if _get.lower() == each.lower():
-                _website = _teach[each]
-                embed = Embed()
-                embed.url = _website
-                embed.title = each
-                embed.description = "Website link for {0}.".format(each)
-                await _c.send(embed=embed)
+        if _get.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_teach.keys())))
+        else:
+            for each in list(_teach.keys()):
+                if _get.lower() == each.lower():
+                    _website = _teach[each]
+                    embed = Embed()
+                    embed.url = _website
+                    embed.title = each
+                    embed.description = "Website link for {0}.".format(each)
+                    await _c.send(embed=embed)
 
     elif _content.lower().startswith("when is my next class? "):
         _classname = _content.split("when is my next class? ")[1]
@@ -305,10 +314,16 @@ async def on_message(msg):
     elif _content.lower().startswith(("!show ", "?show ")):
         _info = _content.split(" ")[1].replace(" ", "")
         _images = Utilities.LinkRead()()['images']
-        _embed = Embed()
-        _embed.set_image(url=_images[_info])
-        _embed.title = "Instructions"
-        await _c.send(embed=_embed)
+        if _info.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_images.keys())))
+
+        else:
+            for _each in _images.keys():
+                if _info.lower() == _each.lower():
+                    _embed = Embed()
+                    _embed.set_image(url=_images[_each])
+                    _embed.title = "Instructions"
+                    await _c.send(embed=_embed)
 
     elif _content.lower().startswith("?grade "):
         _info = _content.split(" ")[1]
@@ -318,8 +333,37 @@ async def on_message(msg):
         for _assignment in _get_grades[_name.content]:
             _embed = Embed()
             _embed.title = _assignment
-            _embed.description = _get_grades[_name.content][_assignment]
-            await ctx.send(embed=_embed)
+            _embed.url = _get_grades[_name.content][_assignment][1]
+            _embed.description = _get_grades[_name.content][_assignment][0]
+            await _author.send(embed=_embed)
+
+    elif _content.lower().startswith(("?create with code ", "!create with code ", "?cwc ", "!cwc ")):
+        _cwc = Utilities.LinkRead()()["CreateWCode"]
+        _info = _content.split(" ")[1].replace(" ", "")
+        if _info.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_cwc.keys())) + "```")
+        else:
+            for _each in _cwc.keys():
+                if _info.lower() == _each.lower():
+                    _embed = Embed()
+                    _embed.title = _each
+                    _embed.url = _cwc[_each]
+                    _embed.description = "Link to the {0} course.".format(_info)
+                    await _c.send(embed=_embed)
+
+    elif _content.lower().startswith(("?troubleshooting ", "!troubleshooting ", "?troubleshoot ", "!troubleshoot ")):
+        _trbl = Utilities.LinkRead()()["Troubleshooting"]
+        _info = _content.split(" ")[1].replace(" ", "")
+        if _info.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_trbl.keys())) + "```")
+        else:
+            for _each in _trbl.keys():
+                if _info.lower() == _each.lower():
+                    _embed = Embed()
+                    _embed.title = _each
+                    _embed.url = _trbl[_each]
+                    _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
+                    await _c.send(embed=_embed)
 
     else:
         await client.process_commands(msg)
@@ -337,7 +381,7 @@ async def addinstructor(ctx):
     _name = _msg.split(" ")[0]
     _link = " ".join(_msg.split(" ")[1:])
     if await test_instructor(ctx):
-        Utilities.LinkWrite(_name=_name, _example=_link)()
+        Utilities.LinkWrite(_location="Instructors", _name=_name, _example=_link)()
 
 
 @client.command(name="addexample", pass_context=True)
@@ -347,6 +391,22 @@ async def addexample(ctx):
     _example = " ".join(_msg.split(" ")[1:])
     if await test_instructor(ctx):
         Utilities.ExamplesWrite(_name=_name, _example=_example)()
+
+
+@client.command(name="addlink", pass_context=True)
+async def addlink(ctx):
+    _msg = ctx.message.content.split("addlink ")[1]
+    _location, _name, _example = _msg.split(" ")
+    if await test_instructor(ctx):
+        Utilities.LinkWrite(_location=_location, _name=_name, _example=_example)()
+
+
+@client.command(name="remlink", pass_context=True)
+async def remlink(ctx):
+    _msg = ctx.message.content.split("remlink ")[1]
+    _location, _name = _msg.split(" ")
+    if await test_instructor(ctx):
+        Utilities.LinkPop(_location=_location, _name=_name)()
 
 
 @client.command(name="version", pass_context=True)

@@ -145,7 +145,6 @@ class AttainGoogleClass(object):
 
     def get_class_work(self):
         a = self.query_info()
-
         _wrk_for_week = dict()
         for each in a[0]:
             _datetime = str(datetime.now()).split(" ")[0][2:]
@@ -192,6 +191,8 @@ class AttainGoogleClass(object):
             _max = each_work['maxPoints']
             _title = each_work['title']
             _workid = each_work['id']
+            _descript = each_work['description']
+            _link = each_work['alternateLink']
 
             for each in students['students']:
                 a = self.service.courses().courseWork().studentSubmissions().list(
@@ -204,13 +205,24 @@ class AttainGoogleClass(object):
                     _name = each['profile']['name']['fullName']
                     if "assignedGrade" in assignment:
                         if DEBUG:
-                            print("{0}\n--------\n{1}\n{2}/{3}".format(
+                            print("{0}\n--------\n{1}\n{2}/{3}\n{4}\n{5}".format(
                                 _name,
                                 _title,
                                 assignment['assignedGrade'],
-                                _max
+                                _max,
+                                _descript,
+                                _link
                             ))
-                        _info = {_title: "{0}/{1}".format(assignment['assignedGrade'], _max)}
+                        _info = {
+                            _title: [
+                                "Assignment Description: {2}\n{0}/{1}".format(
+                                    assignment['assignedGrade'],
+                                    _max,
+                                    _descript
+                                ),
+                                _link
+                            ]
+                        }
                         _grade_dict.setdefault(_name, _info)
         return _grade_dict
 

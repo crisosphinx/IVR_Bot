@@ -22,12 +22,25 @@ class LinkRead(object):
 
 
 class LinkWrite(object):
-    def __init__(self, _name: str, _example: str) -> None:
+    def __init__(self, _location: str, _name: str, _example: str) -> None:
         self.location = "{0}\\link_repository.json".format(
             "\\".join(Documents.__file__.split("\\")[:-1])
         )
         self.json = LinkRead()()
-        self.json[_name].append(_example)
+        self.json[_location].setdefault(_name, _example)
+
+    def __call__(self) -> None:
+        with open(self.location, 'r+') as f:
+            json.dump(self.json, f)
+
+
+class LinkPop(object):
+    def __init__(self, _location: str, _name: str) -> None:
+        self.location = "{0}\\link_repository.json".format(
+            "\\".join(Documents.__file__.split("\\")[:-1])
+        )
+        self.json = LinkRead()()
+        self.json[_location].pop(_name)
 
     def __call__(self) -> None:
         with open(self.location, 'r+') as f:
