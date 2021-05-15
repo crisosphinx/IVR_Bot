@@ -22,7 +22,7 @@ bot_channel = None
 async def retrieve_channel(ctx, requested_channel: str) -> channel:
     _server = None
     if type(ctx) is bot.Bot:
-        _server = [x for x in ctx.guilds if x.name == "Universe Hub"][0]
+        _server = ctx.guild
     if _server is not None:
         _all_channels = dict()
         for key in _server.channels:
