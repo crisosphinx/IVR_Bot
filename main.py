@@ -22,7 +22,9 @@ bot_channel = None
 async def retrieve_channel(ctx, requested_channel: str) -> channel:
     _server = None
     if type(ctx) is bot.Bot:
-        _server = ctx.guild
+        _server = [x for x in ctx.guilds if x.name == "Universe Hub"][0]
+    else:
+        _server = [x for x in client.guilds if x.name == ctx.guild.name][0]
     if _server is not None:
         _all_channels = dict()
         for key in _server.channels:
@@ -136,10 +138,13 @@ async def on_message(msg):
     :param msg:
     :return:
     """
+    global bot_channel
+
     ctx = await client.get_context(msg)
     _author = msg.author
     _content = msg.content
     _checkmsg = CheckMsg(ctx, _author.id)
+    bot_channel = await retrieve_channel(ctx, "bot-channel")
 
     def chunker(seq, size):
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
