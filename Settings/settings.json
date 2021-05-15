@@ -1,5 +1,1 @@
-{
-  "DEBUG": true,
-  "VERSION": "1.0.0",
-  "CALLS": ["!ivr ", "!ivrbot ", "?def "]
-}
+{"DEBUG": true, "VERSION": "1.0.0", "CALLS": ["!ivr ", "!ivrbot ", "?def "]}

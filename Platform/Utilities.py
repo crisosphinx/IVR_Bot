@@ -15,7 +15,7 @@ class SplitDir(object):
     def __call__(self) -> str:
         _dir = str()
         if self.os == "nt":
-            _dir = "\\".join(self.dir.split("/")[:-1])
+            _dir = "/".join(self.dir.split("\\")[:-1])
         elif self.os == "posix":
             _dir = "/".join(self.dir.split("/")[:-1])
 
@@ -104,7 +104,10 @@ class ExamplesWrite(object):
             SplitDir(Documents.__file__)()
         )
         self.json = ExamplesRead()()
-        self.json[_name].append(_example)
+        if _name in self.json.keys():
+            self.json[_name].append(_example)
+        else:
+            self.json.setdefault(_name, []).append(_example)
 
     def __call__(self) -> None:
         with open(self.location, 'r+') as f:
