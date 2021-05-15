@@ -134,6 +134,7 @@ class DefinitionUnity(object):
         self.search_query = _query
         self.unitydocs = LinkRead()()["2018API"]
         self.soup = None
+        self.h2 = "h3"
 
     def __call__(self, embed: bool) -> list or str or bool:
         if embed:
@@ -157,16 +158,15 @@ class DefinitionUnity(object):
         for term in _searcher['2018']:
             _term = term.lower()
             if "." in _term:
-                if name.lower() == _term.split(".")[1]:
+                if name.lower() == _term.split(".")[1].lower():
                     _tried = term
             else:
-                if name.lower() == _term:
+                if name.lower() == _term.lower():
                     _tried = term
 
         if _tried is None:
             for term in _searcher['2018']:
-                _term = term.lower()
-                if name.lower() in _term:
+                if name.lower() in term.lower():
                     _tried = term
 
         return _tried
@@ -198,7 +198,7 @@ class DefinitionUnity(object):
             j = 0
             _divs = _webpage.find_all("div", class_="subsection")
             while j < len(_divs):
-                for _h2 in _divs[j].find_all("h2"):
+                for _h2 in _divs[j].find_all(self.h2):
                     if "Description" in _h2:
                         _childs = _h2.parent.findChildren()
                         _childs = _h2.parent.find_all("p")
@@ -207,7 +207,7 @@ class DefinitionUnity(object):
                 j += 1
 
             for _a in _webpage.find_all("div", class_="subsection"):
-                for _b in _a.find_all("h2"):
+                for _b in _a.find_all(self.h2):
                     if not _check:
                         i = 0
                         if _b.string != "Inherited Members" and _b.string != "Description":
@@ -296,6 +296,6 @@ class GetRandomExample(object):
 
 
 if __name__ == '__main__':
-    # _x = DefinitionUnity("camera")(False)
-    # print(_x, len(_x))
-    DefineWord()("purple")
+    _x = DefinitionUnity("camera")(False)
+    print(_x, len(_x))
+    # DefineWord()("purple")
