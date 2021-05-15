@@ -7,10 +7,25 @@ from random import randint
 from bs4 import BeautifulSoup as Bs
 
 
+class SplitDir(object):
+    def __init__(self, _dir=str()) -> None:
+        self.dir = _dir
+        self.os = os.name
+
+    def __call__(self) -> str:
+        _dir = str()
+        if self.os == "nt":
+            _dir = "\\".join(self.dir.split("\\")[:-1])
+        elif self.os == "posix":
+            _dir = "/".join(self.dir.split("/")[:-1])
+
+        return _dir
+
+
 class LinkRead(object):
     def __init__(self) -> None:
         self.location = "{0}\\link_repository.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
 
     def __call__(self) -> dict:
@@ -24,7 +39,7 @@ class LinkRead(object):
 class LinkWrite(object):
     def __init__(self, _location: str, _name: str, _example: str) -> None:
         self.location = "{0}\\link_repository.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
         self.json = LinkRead()()
         self.json[_location].setdefault(_name, _example)
@@ -37,7 +52,7 @@ class LinkWrite(object):
 class LinkPop(object):
     def __init__(self, _location: str, _name: str) -> None:
         self.location = "{0}\\link_repository.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
         self.json = LinkRead()()
         self.json[_location].pop(_name)
@@ -50,7 +65,7 @@ class LinkPop(object):
 class SettingsRead(object):
     def __init__(self) -> None:
         self.location = "{0}\\settings.json".format(
-            "\\".join(Settings.__file__.split("\\")[:-1])
+            SplitDir(Settings.__file__)()
         )
 
     def __call__(self) -> dict:
@@ -64,7 +79,7 @@ class SettingsRead(object):
 class SrcDir(object):
     def __init__(self):
         self.location = "{0}\\srcdir.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
 
     def __call__(self) -> dict:
@@ -75,7 +90,7 @@ class SrcDir(object):
 class ExamplesRead(object):
     def __init__(self):
         self.location = "{0}\\examples.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
 
     def __call__(self) -> dict:
@@ -86,7 +101,7 @@ class ExamplesRead(object):
 class ExamplesWrite(object):
     def __init__(self, _name: str, _example: str) -> None:
         self.location = "{0}\\examples.json".format(
-            "\\".join(Documents.__file__.split("\\")[:-1])
+            SplitDir(Documents.__file__)()
         )
         self.json = ExamplesRead()()
         self.json[_name].append(_example)
