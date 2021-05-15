@@ -15,7 +15,7 @@ class SplitDir(object):
     def __call__(self) -> str:
         _dir = str()
         if self.os == "nt":
-            _dir = "\\".join(self.dir.split("\\")[:-1])
+            _dir = "\\".join(self.dir.split("/")[:-1])
         elif self.os == "posix":
             _dir = "/".join(self.dir.split("/")[:-1])
 
@@ -24,7 +24,7 @@ class SplitDir(object):
 
 class LinkRead(object):
     def __init__(self) -> None:
-        self.location = "{0}\\link_repository.json".format(
+        self.location = "{0}/link_repository.json".format(
             SplitDir(Documents.__file__)()
         )
 
@@ -38,7 +38,7 @@ class LinkRead(object):
 
 class LinkWrite(object):
     def __init__(self, _location: str, _name: str, _example: str) -> None:
-        self.location = "{0}\\link_repository.json".format(
+        self.location = "{0}/link_repository.json".format(
             SplitDir(Documents.__file__)()
         )
         self.json = LinkRead()()
@@ -51,7 +51,7 @@ class LinkWrite(object):
 
 class LinkPop(object):
     def __init__(self, _location: str, _name: str) -> None:
-        self.location = "{0}\\link_repository.json".format(
+        self.location = "{0}/link_repository.json".format(
             SplitDir(Documents.__file__)()
         )
         self.json = LinkRead()()
@@ -64,7 +64,7 @@ class LinkPop(object):
 
 class SettingsRead(object):
     def __init__(self) -> None:
-        self.location = "{0}\\settings.json".format(
+        self.location = "{0}/settings.json".format(
             SplitDir(Settings.__file__)()
         )
 
@@ -78,7 +78,7 @@ class SettingsRead(object):
 
 class SrcDir(object):
     def __init__(self):
-        self.location = "{0}\\srcdir.json".format(
+        self.location = "{0}/srcdir.json".format(
             SplitDir(Documents.__file__)()
         )
 
@@ -89,7 +89,7 @@ class SrcDir(object):
 
 class ExamplesRead(object):
     def __init__(self):
-        self.location = "{0}\\examples.json".format(
+        self.location = "{0}/examples.json".format(
             SplitDir(Documents.__file__)()
         )
 
@@ -100,7 +100,7 @@ class ExamplesRead(object):
 
 class ExamplesWrite(object):
     def __init__(self, _name: str, _example: str) -> None:
-        self.location = "{0}\\examples.json".format(
+        self.location = "{0}/examples.json".format(
             SplitDir(Documents.__file__)()
         )
         self.json = ExamplesRead()()
