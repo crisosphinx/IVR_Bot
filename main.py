@@ -329,7 +329,7 @@ async def on_message(msg):
         _info = _content.split(" ")[1]
         await _author.send("Please enter name as it appears in Google Classroom: ")
         _name = await client.wait_for("message", check=CheckMsg().non_bot)
-        _get_grades = GoogleComm.AttainGoogleClass(_classname=_info).grades()
+        _get_grades = GoogleComm.AttainGoogleClass(_classname=_info).grades(_name.content)
         for _assignment in _get_grades[_name.content]:
             _embed = Embed()
             _embed.title = _assignment
@@ -407,6 +407,14 @@ async def remlink(ctx):
     _location, _name = _msg.split(" ")
     if await test_instructor(ctx):
         Utilities.LinkPop(_location=_location, _name=_name)()
+
+
+@client.command(name="numberusers", aliases=["usercount", "countuser", "numberuser"], pass_context=True)
+async def countthem(ctx):
+    _server = ctx.guild
+    _cnt = _server.member_count
+    if await test_instructor(ctx):
+        await ctx.channel.send("There are {0} users in this server.".format(_cnt))
 
 
 @client.command(name="version", pass_context=True)

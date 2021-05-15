@@ -73,9 +73,10 @@ class AttainGoogleClass(object):
     def __init__(self, _classname: str) -> None:
         self.scopes = [
             'https://www.googleapis.com/auth/classroom.courses.readonly',
+            'https://www.googleapis.com/auth/classroom.coursework.students.readonly',
             'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
             'https://www.googleapis.com/auth/classroom.topics.readonly',
-            "https://www.googleapis.com/auth/classroom.rosters.readonly"
+            "https://www.googleapis.com/auth/classroom.rosters"
         ]
         self.classname = _classname
         self.courses = None
@@ -84,6 +85,8 @@ class AttainGoogleClass(object):
         self.topic_groupings = dict()
         self.class_rosters = list()
         self.course_info()
+
+        self.student_collective = dict()
 
     def __call__(self):
         return self.get_class_work()
@@ -171,7 +174,20 @@ class AttainGoogleClass(object):
             _work_due = _wrk_for_week
         return _work_due
 
-    def grades(self) -> dict:
+    def process_token(self, course_id=str(), token=str()) -> None:
+        if token:
+            students = self.service.courses().students().list(courseId=course_id, pageToken=token).execute()
+        else:
+            students = self.service.courses().students().list(courseId=course_id).execute()
+        if 'nextPageToken' in students:
+            for each_student in students['students']:
+                self.student_collective.setdefault(each_student['profile']['name']['fullName'], each_student)
+            self.process_token(
+                course_id=course_id,
+                token=students['nextPageToken']
+            )
+
+    def grades(self, username: str) -> dict:
         _grade_dict = dict()
         course = None
         for each_class in self.courses:
@@ -181,49 +197,52 @@ class AttainGoogleClass(object):
 
         course_id = course['id']
         classes = self.service.courses().courseWork().list(courseId=course_id).execute()
-        students = self.service.courses().students().list(courseId=course_id).execute()
+        self.process_token(course_id=course_id)
 
         _title = str()
         _max = str()
         _workid = str()
 
         for each_work in classes['courseWork']:
-            _max = each_work['maxPoints']
-            _title = each_work['title']
-            _workid = each_work['id']
-            _descript = each_work['description']
-            _link = each_work['alternateLink']
+            if "maxPoints" in list(each_work.keys()):
+                _max = each_work['maxPoints']
+                _title = each_work['title']
+                _workid = each_work['id']
+                _descript = each_work['description']
+                _link = each_work['alternateLink']
 
-            for each in students['students']:
-                a = self.service.courses().courseWork().studentSubmissions().list(
-                    courseId=course_id,
-                    courseWorkId=_workid,
-                    userId=each['userId']
-                ).execute()
-
-                for assignment in a['studentSubmissions']:
+                if username in self.student_collective.keys():
+                    each = self.student_collective[username]
                     _name = each['profile']['name']['fullName']
-                    if "assignedGrade" in assignment:
-                        if DEBUG:
-                            print("{0}\n--------\n{1}\n{2}/{3}\n{4}\n{5}".format(
-                                _name,
-                                _title,
-                                assignment['assignedGrade'],
-                                _max,
-                                _descript,
-                                _link
-                            ))
-                        _info = {
-                            _title: [
-                                "Assignment Description: {2}\n{0}/{1}".format(
+                    a = self.service.courses().courseWork().studentSubmissions().list(
+                        courseId=course_id,
+                        courseWorkId=_workid,
+                        userId=each['userId']
+                    ).execute()
+
+                    for assignment in a['studentSubmissions']:
+                        if "assignedGrade" in assignment:
+                            if DEBUG:
+                                print("{0}\n--------\n{1}\n{2}/{3}\n{4}\n{5}".format(
+                                    _name,
+                                    _title,
                                     assignment['assignedGrade'],
                                     _max,
-                                    _descript
-                                ),
-                                _link
-                            ]
-                        }
-                        _grade_dict.setdefault(_name, _info)
+                                    _descript,
+                                    _link
+                                ))
+                            _info = {
+                                _title: [
+                                    "Assignment Description: {2}\n{0}/{1}".format(
+                                        assignment['assignedGrade'],
+                                        _max,
+                                        _descript
+                                    ),
+                                    _link
+                                ]
+                            }
+                            _grade_dict.setdefault(_name, _info)
+
         return _grade_dict
 
     def roster(self) -> list:
@@ -235,7 +254,7 @@ def main():
     Prints the names of the first 10 courses the user has access to.
     """
 
-    assignments = AttainGoogleClass(_classname="TesterClass").grades()
+    assignments = AttainGoogleClass(_classname="Universe: Introduction to Unity in 3D/VR").grades("A Dav")
     return assignments
 
 
