@@ -163,7 +163,7 @@ async def on_message(msg):
             _c = _author
 
     if _content.lower().startswith(("?def", "!def")):
-        _msg = "".join(_content.split(" ")[1:])
+        _msg = _content.split("def ")[1].replace(" ", "")
         _return = Utilities.DefinitionUnity(_msg)(True)
         if _return:
             reconfigure = dict()
@@ -259,7 +259,7 @@ async def on_message(msg):
         _web = Utilities.LinkRead()()["Websites"]
         _get = "".join(_content.split(" ")[1:])
         if _get.lower() == "list":
-            await _c.send("```\n" + "\n".join(list(_web.keys())))
+            await _c.send("```\n" + "\n".join(list(_web.keys())) + "```")
         else:
             for each in list(_web.keys()):
                 if _get.lower() == each.lower():
@@ -277,7 +277,7 @@ async def on_message(msg):
         _teach = Utilities.LinkRead()()["Instructors"]
         _get = "".join(_content.split(" ")[1:])
         if _get.lower() == "list":
-            await _c.send("```\n" + "\n".join(list(_teach.keys())))
+            await _c.send("```\n" + "\n".join(list(_teach.keys())) + "```")
         else:
             for each in list(_teach.keys()):
                 if _get.lower() == each.lower():
@@ -315,7 +315,7 @@ async def on_message(msg):
         _info = _content.split(" ")[1].replace(" ", "")
         _images = Utilities.LinkRead()()['images']
         if _info.lower() == "list":
-            await _c.send("```\n" + "\n".join(list(_images.keys())))
+            await _c.send("```\n" + "\n".join(list(_images.keys())) + "```")
 
         else:
             for _each in _images.keys():
@@ -337,16 +337,16 @@ async def on_message(msg):
             _embed.description = _get_grades[_name.content][_assignment][0]
             await _author.send(embed=_embed)
 
-    elif _content.lower().startswith(("?create with code ", "!create with code ", "?cwc ", "!cwc ")):
+    elif _content.lower().startswith(("?cwc ", "!cwc ")):
         _cwc = Utilities.LinkRead()()["CreateWCode"]
-        _info = _content.split(" ")[1].replace(" ", "")
+        _info = "".join(_content.split(" ")[1:])
         if _info.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_cwc.keys())) + "```")
         else:
             for _each in _cwc.keys():
                 if _info.lower() == _each.lower():
                     _embed = Embed()
-                    _embed.title = _each
+                    _embed.title = "Create With Code Course: {0}".format(_each)
                     _embed.url = _cwc[_each]
                     _embed.description = "Link to the {0} course.".format(_info)
                     await _c.send(embed=_embed)
