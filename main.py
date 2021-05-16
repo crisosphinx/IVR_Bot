@@ -10,7 +10,6 @@ from discord.ext.commands import bot
 from Documents.formatter import *
 from Platform import Utilities, GoogleComm
 
-
 # Intents
 Intents = Intents().all()
 
@@ -138,13 +137,11 @@ async def on_message(msg):
     :param msg:
     :return:
     """
-    global bot_channel
 
     ctx = await client.get_context(msg)
     _author = msg.author
     _content = msg.content
     _checkmsg = CheckMsg(ctx, _author.id)
-    bot_channel = await retrieve_channel(ctx, "bot-channel")
 
     def chunker(seq, size):
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
@@ -162,7 +159,7 @@ async def on_message(msg):
     else:
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
-            _c = bot_channel
+            _c = await retrieve_channel(ctx, "bot-channel")
         else:
             _c = _author
 
@@ -267,7 +264,7 @@ async def on_message(msg):
         else:
             for each in list(_web.keys()):
                 if _get.lower() == each.lower():
-                    if "Intro" in each or "Compendium" in each:
+                    if "Intro" in each or "Compendium" in each or "RecommendedPrograms" in each or "Documentation" in each:
                         _website = "https://docs.google.com/document/d/{0}".format(_web[each])
                     else:
                         _website = _web[each]
@@ -306,14 +303,31 @@ async def on_message(msg):
 
         await ctx.send(_final_info)
 
-    elif _content.lower().startswith("!get example "):
-        _get_example = _content.split("!get example ")[1].replace(" ", "")
+    elif _content.lower().startswith(("?what is ", "!what is")):
+        _word = _content.split("what is ")[1]
+        _info = Utilities.DefineWord()(_word)
+        embed = Embed()
+        embed.title = _info[0]
+        embed.url = _info[1]
+        embed.description = "Definition of {0}.".format(_info[0])
+        for each in list(_info[2].keys()):
+            if len(_info[2][each]) > 0:
+                embed.add_field(name=each, value=" - " + "\n - ".join(_info[2][each]), inline=True)
+
+        await _author.send(embed=embed)
+
+    elif _content.lower().startswith(("!get example ", "?get example ")):
+        _get_example = _content.split("get example ")[1].replace(" ", "")
         _ex = Utilities.GetRandomExample()(_get_example)
         if _ex:
             _embed = Embed()
             _embed.title = _get_example
             _embed.description = _ex
             await _c.send(embed=_embed)
+
+    elif _content.lower().startswith(("!list examples", "?list examples")):
+        _all_ex = list(Utilities.ExamplesRead()().keys())
+        await _c.send("```\n" + "\n".join(_all_ex) + "```")
 
     elif _content.lower().startswith(("!show ", "?show ")):
         _info = _content.split(" ")[1].replace(" ", "")
@@ -330,15 +344,21 @@ async def on_message(msg):
                     await _c.send(embed=_embed)
 
     elif _content.lower().startswith("?grade "):
-        _info = _content.split(" ")[1]
+        _info = _content.split("grade ")[1]
         await _author.send("Please enter name as it appears in Google Classroom: ")
         _name = await client.wait_for("message", check=CheckMsg().non_bot)
-        _get_grades = GoogleComm.AttainGoogleClass(_classname=_info).grades(_name.content)
-        for _assignment in _get_grades[_name.content]:
+        # _get_grades = GoogleComm.AttainGoogleClass(_classname=_info).grades(_name.content)
+        _get_grades = GoogleComm.ThreadClass(_info, _name.content)
+        _get_grades.daemon = True
+        _get_grades.start()
+        _get_grades.join()
+        _results = _get_grades.results
+        for _assignment in _results[_name.content]:
+            _assignment_name = list(_assignment.keys())[0]
             _embed = Embed()
-            _embed.title = _assignment
-            _embed.url = _get_grades[_name.content][_assignment][1]
-            _embed.description = _get_grades[_name.content][_assignment][0]
+            _embed.title = _assignment_name
+            _embed.url = _assignment[_assignment_name][1]
+            _embed.description = _assignment[_assignment_name][0]
             await _author.send(embed=_embed)
 
     elif _content.lower().startswith(("?cwc ", "!cwc ")):
@@ -369,6 +389,39 @@ async def on_message(msg):
                     _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
                     await _c.send(embed=_embed)
 
+    elif _content.lower().startswith("?help"):
+        _all_cmds = """
+        ? help
+        ?/!troubleshooting / ?/!troubleshoot [name]
+        ?/!cwc [list / name]
+        ?grade [class name]
+        ?/! show [name]
+        ?/!list examples
+        ?/!get example [name]
+        ?/!what is [word]
+        ?/!def [C# term]
+        ?/!about
+        ?/!website [list / name]
+        ?/!download [list / name]
+        when is my next class? [class name]
+        
+        ----  ----  ----  ----  ----  ----  ----
+        !ivr addinstructor
+        !ivr addexample
+        !ivr remlink
+        !ivr numberusers / usercount / countuser / numberuser
+        !ivr version
+        """
+        await _author.send("```{0}```".format(_all_cmds))
+
+        _doc = Utilities.LinkRead()()["Documentation"]
+        _website = "https://docs.google.com/document/d/{0}".format(_doc)
+        embed = Embed()
+        embed.url = _website
+        embed.title = "Documentation for Bot"
+        embed.description = "Website link for {0}.".format("Documentation")
+        await _c.send(embed=embed)
+
     else:
         await client.process_commands(msg)
 
@@ -387,6 +440,9 @@ async def addinstructor(ctx):
     if await test_instructor(ctx):
         Utilities.LinkWrite(_location="Instructors", _name=_name, _example=_link)()
 
+    else:
+        await not_instructor(ctx)
+
 
 @client.command(name="addexample", pass_context=True)
 async def addexample(ctx):
@@ -396,6 +452,9 @@ async def addexample(ctx):
     if await test_instructor(ctx):
         Utilities.ExamplesWrite(_name=_name, _example=_example)()
 
+    else:
+        await not_instructor(ctx)
+
 
 @client.command(name="addlink", pass_context=True)
 async def addlink(ctx):
@@ -403,6 +462,9 @@ async def addlink(ctx):
     _location, _name, _example = _msg.split(" ")
     if await test_instructor(ctx):
         Utilities.LinkWrite(_location=_location, _name=_name, _example=_example)()
+
+    else:
+        await not_instructor(ctx)
 
 
 @client.command(name="remlink", pass_context=True)
@@ -412,6 +474,9 @@ async def remlink(ctx):
     if await test_instructor(ctx):
         Utilities.LinkPop(_location=_location, _name=_name)()
 
+    else:
+        await not_instructor(ctx)
+
 
 @client.command(name="numberusers", aliases=["usercount", "countuser", "numberuser"], pass_context=True)
 async def countthem(ctx):
@@ -420,6 +485,9 @@ async def countthem(ctx):
     if await test_instructor(ctx):
         await ctx.channel.send("There are {0} users in this server.".format(_cnt))
 
+    else:
+        await not_instructor(ctx)
+
 
 @client.command(name="version", pass_context=True)
 async def version(ctx):
@@ -427,23 +495,10 @@ async def version(ctx):
     await ctx.author.send("Bot is running software version: {0}".format(_ver))
 
 
-@client.command(name="whatis", pass_context=True)
-async def define(ctx):
-    _msg = ctx.message.content
-    _author = ctx.author
-    _word = _msg.split("whatis ")[1]
-    _info = Utilities.DefineWord()(_word)
-    embed = Embed()
-    embed.title = _info[0]
-    embed.url = _info[1]
-    embed.description = "Definition of {0}.".format(_info[0])
-    for each in list(_info[2].keys()):
-        if len(_info[2][each]) > 0:
-            embed.add_field(name=each, value=" - " + "\n - ".join(_info[2][each]), inline=True)
-
-    await ctx.message.delete()
-    await _author.send(embed=embed)
-
+async def not_instructor(ctx):
+    _msg = await ctx.channel.send("You do not have permissions to use this command.")
+    await asyncio.sleep(3)
+    await _msg.delete()
 
 # Permissions number: 125952
 # --------------------------

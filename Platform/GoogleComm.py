@@ -9,6 +9,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from Platform import Utilities
+from threading import Thread
+from multiprocessing import Process
 
 DEBUG = Utilities.SettingsRead()()['DEBUG']
 
@@ -69,7 +71,7 @@ class AttainGoogleDoc(object):
         return rules
 
 
-class AttainGoogleClass(object):
+class AttainGoogleClass(Thread):
     def __init__(self, _classname: str) -> None:
         self.scopes = [
             'https://www.googleapis.com/auth/classroom.courses.readonly',
@@ -187,8 +189,7 @@ class AttainGoogleClass(object):
                 token=students['nextPageToken']
             )
 
-    def grades(self, username: str) -> dict:
-        _grade_dict = dict()
+    def grades(self, username: str, results: dict):
         course = None
         for each_class in self.courses:
             if self.classname == each_class['name']:
@@ -214,6 +215,8 @@ class AttainGoogleClass(object):
                 if username in self.student_collective.keys():
                     each = self.student_collective[username]
                     _name = each['profile']['name']['fullName']
+                    if _name not in results.keys():
+                        results.setdefault(_name, [])
                     a = self.service.courses().courseWork().studentSubmissions().list(
                         courseId=course_id,
                         courseWorkId=_workid,
@@ -241,12 +244,39 @@ class AttainGoogleClass(object):
                                     _link
                                 ]
                             }
-                            _grade_dict.setdefault(_name, _info)
-
-        return _grade_dict
+                            results[_name].append(_info)
 
     def roster(self) -> list:
         return [len(self.class_rosters), "\n".join(self.class_rosters)]
+
+
+class ThreadClass(Thread):
+    def __init__(self, _class=str(), _user=str()):
+        self.results = dict()
+        super(ThreadClass, self).__init__(
+            daemon=True,
+            target=AttainGoogleClass(_classname=_class).grades,
+            args=(_user, self.results, )
+        )
+
+    def attain_class_grades(self) -> dict:
+        self.start()
+        self.join()
+        return self.results
+
+
+class ProcessClass(Process):
+    def __init__(self, _class=str(), _user=str()):
+        self.results = dict()
+        super(ProcessClass, self).__init__(
+            target=AttainGoogleClass(_classname=_class).grades,
+            args=(_user, self.results, )
+        )
+
+    def attain_class_grades(self) -> dict:
+        self.start()
+        self.join()
+        return self.results
 
 
 def main():
@@ -254,8 +284,11 @@ def main():
     Prints the names of the first 10 courses the user has access to.
     """
 
-    assignments = AttainGoogleClass(_classname="Universe: Introduction to Unity in 3D/VR").grades("A Dav")
-    return assignments
+    _class = "R5 Universe: Introduction to Unity in 3D/VR"
+    _user = "Chelsie Harrison"
+    # assignments = AttainGoogleClass(_classname=_class).grades(_user)
+    _assignments = ThreadClass(_class, _user).attain_class_grades()
+    return _assignments
 
 
 if __name__ == '__main__':
