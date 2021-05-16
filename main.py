@@ -389,7 +389,7 @@ async def on_message(msg):
                     _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
                     await _c.send(embed=_embed)
 
-    elif _content.lower().startswith("?help"):
+    elif _content.lower().startswith(("!help", "?help")):
         _all_cmds = """
         ? help
         ?/!troubleshooting / ?/!troubleshoot [name]
@@ -420,7 +420,7 @@ async def on_message(msg):
         embed.url = _website
         embed.title = "Documentation for Bot"
         embed.description = "Website link for {0}.".format("Documentation")
-        await _c.send(embed=embed)
+        await _author.send(embed=embed)
 
     else:
         await client.process_commands(msg)
