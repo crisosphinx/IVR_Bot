@@ -335,7 +335,7 @@ async def on_message(msg):
 
     elif _content.lower().startswith(("!show ", "?show ")):
         _info = _content.split(" ")[1].replace(" ", "")
-        _images = Utilities.LinkRead()()['images']
+        _images = Utilities.LinkRead()()['Images']
         if _info.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_images.keys())) + "```")
 
