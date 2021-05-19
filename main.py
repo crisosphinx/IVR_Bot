@@ -377,7 +377,7 @@ async def on_message(msg):
 
     elif _content.lower().startswith(("?troubleshooting ", "!troubleshooting ", "?troubleshoot ", "!troubleshoot ")):
         _trbl = Utilities.LinkRead()()["Troubleshooting"]
-        _info = _content.split(" ")[1].replace(" ", "")
+        _info = " ".join(_content.split(" ")[1:])
         if _info.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_trbl.keys())) + "```")
         else:
@@ -390,37 +390,122 @@ async def on_message(msg):
                     await _c.send(embed=_embed)
 
     elif _content.lower().startswith(("!help", "?help")):
-        _all_cmds = """
-        ? help
-        ?/!troubleshooting / ?/!troubleshoot [name]
-        ?/!cwc [list / name]
-        ?grade [class name]
-        ?/! show [name]
-        ?/!list examples
-        ?/!get example [name]
-        ?/!what is [word]
-        ?/!def [C# term]
-        ?/!about
-        ?/!website [list / name]
-        ?/!download [list / name]
-        when is my next class? [class name]
-        
-        ----  ----  ----  ----  ----  ----  ----
-        !ivr addinstructor
-        !ivr addexample
-        !ivr remlink
-        !ivr numberusers / usercount / countuser / numberuser
-        !ivr version
-        """
-        await _author.send("```{0}```".format(_all_cmds))
+        if len(_content.split("help")[1]) == 0:
+            _all_cmds = """
+? help
+?/!troubleshooting / ?/!troubleshoot [name]
+?/!cwc [list / name]
+?grade [class name]
+?/!show [name]
+?/!list examples
+?/!get example [name]
+?/!what is [word]
+?/!def [C# term]
+?/!about
+?/!website [list / name]
+?/!download [list / name]
+when is my next class? [class name]
 
-        _doc = Utilities.LinkRead()()["Documentation"]
-        _website = "https://docs.google.com/document/d/{0}".format(_doc)
-        embed = Embed()
-        embed.url = _website
-        embed.title = "Documentation for Bot"
-        embed.description = "Website link for {0}.".format("Documentation")
-        await _author.send(embed=embed)
+----  ----  ----  ----  ----  ----  ----
+!ivr addinstructor
+!ivr addexample
+!ivr remlink
+!ivr numberusers / usercount / countuser / numberuser
+!ivr version
+"""
+            await _author.send("```{0}```".format(_all_cmds))
+
+            _doc = Utilities.LinkRead()()["Documentation"]
+            _website = "https://docs.google.com/document/d/{0}".format(_doc)
+            embed = Embed()
+            embed.url = _website
+            embed.title = "Documentation for Bot"
+            embed.description = "Website link for {0}.".format("Documentation")
+            await _author.send(embed=embed)
+
+        else:
+            _get_word = _content.split("help ")[1]
+            if _get_word.lower() == "help":
+                await _author.send("{0} can help you with any specific command or relaying all commands to you.".format(
+                    _get_word
+                ))
+
+            elif _get_word.lower() in ("troubleshooting", "troubleshoot"):
+                await _author.send(
+                    "{0} takes exactly one argument. Please type the associated troubleshoot you require.\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["Troubleshooting"].keys()))
+                    ))
+
+            elif _get_word.lower() == "cwc":
+                await _author.send(
+                    "{0} takes exactly one argument. Please type the associated course you require.\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["CreateWCode"].keys()))
+                    ))
+
+            elif _get_word.lower() == "grade":
+                await _author.send(
+                    "{0} takes exactly one argument. Please add your course name.".format(_get_word))
+
+            elif _get_word.lower() == "show":
+                await _author.send(
+                    "{0} takes exactly one argument. Please specify one of the following images.\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["Images"].keys()))
+                    ))
+
+            elif _get_word.lower() == "list examples":
+                await _author.send(
+                    "{0} will list all examples to query from.".format(_get_word)
+                )
+
+            elif _get_word.lower() == "get example":
+                await _author.send(
+                    "{0} takes exactly one argument. Please specify the example you wish to get!\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.ExamplesRead()().keys()))
+                    )
+                )
+
+            elif _get_word.lower() == "what is":
+                await _author.send(
+                    "{0} takes exactly one argument. " +
+                    "Please specify any word that you wish to get the definition of.".format(
+                        _get_word
+                    )
+                )
+
+            elif _get_word.lower() == "def":
+                await _author.send(
+                    "{0} takes exactly one argument. You need to specify the C# term you need clarified.".format(
+                        _get_word
+                    )
+                )
+
+            elif _get_word.lower() == "about":
+                await _author.send(
+                    "{0} takes exactly one argument. You need to specify the instructor to learn about:\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["Instructors"].keys()))
+                    )
+                )
+
+            elif _get_word.lower() == "website":
+                await _author.send(
+                    "{0} takes exactly one argument. You need to specify the website you with to go to.\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["Websites"].keys()))
+                    )
+                )
+
+            elif _get_word.lower() == "download":
+                await _author.send(
+                    "{0} takes exactly one argument. You need to specify the download you want.\n- {1}".format(
+                        _get_word,
+                        "\n- ".join(list(Utilities.LinkRead()()["Downloads"].keys()))
+                    )
+                )
 
     else:
         await client.process_commands(msg)
@@ -429,7 +514,10 @@ async def on_message(msg):
         if _checkmsg.dm_check(msg):
             pass
         elif _checkmsg.non_bot(msg):
+            _tempmsg = await _c.send("Deleting messages in 3 seconds...")
+            await asyncio.sleep(3)
             await msg.delete()
+            await _tempmsg.delete()
 
 
 @client.command(name="addinstructor", pass_context=True)
@@ -459,9 +547,9 @@ async def addexample(ctx):
 @client.command(name="addlink", pass_context=True)
 async def addlink(ctx):
     _msg = ctx.message.content.split("addlink ")[1]
-    _location, _name, _example = _msg.split(" ")
+    _location, _name, _link = _msg.split(" ")
     if await test_instructor(ctx):
-        Utilities.LinkWrite(_location=_location, _name=_name, _example=_example)()
+        Utilities.LinkWrite(_location=_location, _name=_name, _example=_link)()
 
     else:
         await not_instructor(ctx)
