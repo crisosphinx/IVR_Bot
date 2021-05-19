@@ -417,9 +417,9 @@ when is my next class? [class name]
 !ivr numberusers / usercount / countuser / numberuser
 !ivr version
 """
-            await _author.send("```{0}```".format(_all_cmds))
+            await _c.send("```{0}```".format(_all_cmds))
 
-            _doc = Utilities.LinkRead()()["Documentation"]
+            _doc = Utilities.LinkRead()()["Websites"]["Documentation"]
             _website = "https://docs.google.com/document/d/{0}".format(_doc)
             embed = Embed()
             embed.url = _website
