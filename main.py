@@ -393,10 +393,10 @@ async def on_message(msg):
                     _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
                     await _c.send(embed=_embed)
 
-    elif _content.lower().startswith(("!help", "?help")):
-        if len(_content.split("help")[1]) == 0:
+    elif _content.lower().startswith(("!h", "?h")):
+        if len(_content.split("h")[1]) == 0:
             _all_cmds = """
-?/!help
+?/!h
 ?/!troubleshooting / ?/!troubleshoot [name]
 ?/!cwc [list / name]
 ?grade [class name]
@@ -428,8 +428,8 @@ when is my next class? [class name]
             await _c.send(embed=embed)
 
         else:
-            _get_word = _content.split("help ")[1]
-            if _get_word.lower() == "help":
+            _get_word = _content.split("h ")[1]
+            if _get_word.lower() == "h":
                 await _c.send("{0} can help you with any specific command or relaying all commands to you.".format(
                     _get_word
                 ))
