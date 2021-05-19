@@ -430,43 +430,47 @@ when is my next class? [class name]
         else:
             _get_word = _content.split("h ")[1]
             if _get_word.lower() == "h":
-                await _c.send("{0} can help you with any specific command or relaying all commands to you.".format(
-                    _get_word
-                ))
+                await _c.send(
+                    "```{0} can help you with any specific command or relaying all commands to you.```".format(
+                        _get_word
+                    )
+                )
 
             elif _get_word.lower() in ("troubleshooting", "troubleshoot"):
                 await _c.send(
-                    "{0} takes exactly one argument. Please type the associated troubleshoot you require.\n- {1}".format(
+                    "```{0} takes exactly one argument. " +
+                    "Please type the associated troubleshoot you require.\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Troubleshooting"].keys()))
                     ))
 
             elif _get_word.lower() == "cwc":
                 await _c.send(
-                    "{0} takes exactly one argument. Please type the associated course you require.\n- {1}".format(
+                    "```{0} takes exactly one argument. " +
+                    "Please type the associated course you require.\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["CreateWCode"].keys()))
                     ))
 
             elif _get_word.lower() == "grade":
                 await _c.send(
-                    "{0} takes exactly one argument. Please add your course name.".format(_get_word))
+                    "```{0} takes exactly one argument. Please add your course name.```".format(_get_word))
 
             elif _get_word.lower() == "show":
                 await _c.send(
-                    "{0} takes exactly one argument. Please specify one of the following images.\n- {1}".format(
+                    "```{0} takes exactly one argument. Please specify one of the following images.\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Images"].keys()))
                     ))
 
             elif _get_word.lower() == "list examples":
                 await _c.send(
-                    "{0} will list all examples to query from.".format(_get_word)
+                    "```{0} will list all examples to query from.```".format(_get_word)
                 )
 
             elif _get_word.lower() == "get example":
                 await _c.send(
-                    "{0} takes exactly one argument. Please specify the example you wish to get!\n- {1}".format(
+                    "```{0} takes exactly one argument. Please specify the example you wish to get!\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.ExamplesRead()().keys()))
                     )
@@ -474,22 +478,23 @@ when is my next class? [class name]
 
             elif _get_word.lower() == "what is":
                 await _c.send(
-                    "{0} takes exactly one argument. " +
-                    "Please specify any word that you wish to get the definition of.".format(
+                    "```{0} takes exactly one argument. " +
+                    "Please specify any word that you wish to get the definition of.```".format(
                         _get_word
                     )
                 )
 
             elif _get_word.lower() == "def":
                 await _c.send(
-                    "{0} takes exactly one argument. You need to specify the C# term you need clarified.".format(
+                    "```{0} takes exactly one argument. You need to specify the C# term you need clarified.```".format(
                         _get_word
                     )
                 )
 
             elif _get_word.lower() == "about":
                 await _c.send(
-                    "{0} takes exactly one argument. You need to specify the instructor to learn about:\n- {1}".format(
+                    "```{0} takes exactly one argument. " +
+                    "You need to specify the instructor to learn about:\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Instructors"].keys()))
                     )
@@ -497,7 +502,8 @@ when is my next class? [class name]
 
             elif _get_word.lower() == "website":
                 await _c.send(
-                    "{0} takes exactly one argument. You need to specify the website you with to go to.\n- {1}".format(
+                    "```{0} takes exactly one argument. " +
+                    "You need to specify the website you with to go to.\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Websites"].keys()))
                     )
@@ -505,7 +511,8 @@ when is my next class? [class name]
 
             elif _get_word.lower() == "download":
                 await _c.send(
-                    "{0} takes exactly one argument. You need to specify the download you want.\n- {1}".format(
+                    "```{0} takes exactly one argument." +
+                    "You need to specify the download you want.\n- {1}```".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Downloads"].keys()))
                     )
