@@ -264,7 +264,11 @@ async def on_message(msg):
         else:
             for each in list(_web.keys()):
                 if _get.lower() == each.lower():
-                    if "Intro" in each or "Compendium" in each or "RecommendedPrograms" in each or "Documentation" in each:
+                    if (
+                            "Intro" in each or "Compendium" in each or
+                            "RecommendedPrograms" in each or "Documentation" in each or
+                            "ComputerRecommendations" in each
+                    ):
                         _website = "https://docs.google.com/document/d/{0}".format(_web[each])
                     else:
                         _website = _web[each]
@@ -392,7 +396,7 @@ async def on_message(msg):
     elif _content.lower().startswith(("!help", "?help")):
         if len(_content.split("help")[1]) == 0:
             _all_cmds = """
-? help
+?/!help
 ?/!troubleshooting / ?/!troubleshoot [name]
 ?/!cwc [list / name]
 ?grade [class name]
@@ -421,47 +425,47 @@ when is my next class? [class name]
             embed.url = _website
             embed.title = "Documentation for Bot"
             embed.description = "Website link for {0}.".format("Documentation")
-            await _author.send(embed=embed)
+            await _c.send(embed=embed)
 
         else:
             _get_word = _content.split("help ")[1]
             if _get_word.lower() == "help":
-                await _author.send("{0} can help you with any specific command or relaying all commands to you.".format(
+                await _c.send("{0} can help you with any specific command or relaying all commands to you.".format(
                     _get_word
                 ))
 
             elif _get_word.lower() in ("troubleshooting", "troubleshoot"):
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. Please type the associated troubleshoot you require.\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Troubleshooting"].keys()))
                     ))
 
             elif _get_word.lower() == "cwc":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. Please type the associated course you require.\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["CreateWCode"].keys()))
                     ))
 
             elif _get_word.lower() == "grade":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. Please add your course name.".format(_get_word))
 
             elif _get_word.lower() == "show":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. Please specify one of the following images.\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Images"].keys()))
                     ))
 
             elif _get_word.lower() == "list examples":
-                await _author.send(
+                await _c.send(
                     "{0} will list all examples to query from.".format(_get_word)
                 )
 
             elif _get_word.lower() == "get example":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. Please specify the example you wish to get!\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.ExamplesRead()().keys()))
@@ -469,7 +473,7 @@ when is my next class? [class name]
                 )
 
             elif _get_word.lower() == "what is":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. " +
                     "Please specify any word that you wish to get the definition of.".format(
                         _get_word
@@ -477,14 +481,14 @@ when is my next class? [class name]
                 )
 
             elif _get_word.lower() == "def":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. You need to specify the C# term you need clarified.".format(
                         _get_word
                     )
                 )
 
             elif _get_word.lower() == "about":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. You need to specify the instructor to learn about:\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Instructors"].keys()))
@@ -492,7 +496,7 @@ when is my next class? [class name]
                 )
 
             elif _get_word.lower() == "website":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. You need to specify the website you with to go to.\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Websites"].keys()))
@@ -500,7 +504,7 @@ when is my next class? [class name]
                 )
 
             elif _get_word.lower() == "download":
-                await _author.send(
+                await _c.send(
                     "{0} takes exactly one argument. You need to specify the download you want.\n- {1}".format(
                         _get_word,
                         "\n- ".join(list(Utilities.LinkRead()()["Downloads"].keys()))
