@@ -9,6 +9,7 @@ from discord.ext import commands
 from discord.ext.commands import bot
 from Documents.formatter import *
 from Platform import Utilities, GoogleComm
+import textwrap
 
 # Intents
 Intents = Intents().all()
@@ -163,10 +164,14 @@ async def on_message(msg):
         else:
             _c = _author
 
+    if _content.lower().startswith(("!ping", "?ping")):
+        await _c.send("Pong! {0} ms".format(round(client.latency, 1)))
+
     if _content.lower().startswith(("?def", "!def")):
         _msg = _content.split("def ")[1].replace(" ", "")
         _return = Utilities.DefinitionUnity(_msg)(True)
         if _return:
+            second_sent = False
             reconfigure = dict()
             _key = str()
             for each in _return[3:]:
@@ -177,7 +182,9 @@ async def on_message(msg):
             _first_message = Embed()
             _first_message.title = _return[0]
             _first_message.url = _return[1]
-            _first_message.description = _return[2]
+
+            lines = textwrap.wrap(_return[2], 2048, break_long_words=False)
+            _first_message.description = lines[0]
 
             async with _c.typing():
                 for key in reconfigure:
@@ -196,7 +203,11 @@ async def on_message(msg):
 
                             _first_message = Embed()
                             _first_message.title = "Continued"
-                            _first_message.description = "..."
+                            if len(lines) > 1 and not second_sent:
+                                _first_message.description = lines[1]
+                                second_sent = True
+                            else:
+                                _first_message.description = "..."
 
                         else:
                             # _line_split = ceil(len(_combined_lines) / 1024)
@@ -209,7 +220,11 @@ async def on_message(msg):
 
                             _first_message = Embed()
                             _first_message.title = "Continued"
-                            _first_message.description = "..."
+                            if len(lines) > 1 and not second_sent:
+                                _first_message.description = lines[1]
+                                second_sent = True
+                            else:
+                                _first_message.description = "..."
 
                     else:
                         # We want to split the fields across multiple embeds
@@ -225,7 +240,11 @@ async def on_message(msg):
 
                             _first_message = Embed()
                             _first_message.title = "Continued"
-                            _first_message.description = "..."
+                            if len(lines) > 1 and not second_sent:
+                                _first_message.description = lines[1]
+                                second_sent = True
+                            else:
+                                _first_message.description = "..."
 
         else:
             await _author.send("Term could not be found.")

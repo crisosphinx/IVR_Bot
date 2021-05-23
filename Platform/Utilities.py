@@ -150,7 +150,7 @@ class Token(object):
 class DefinitionUnity(object):
     def __init__(self, _query=str()) -> None:
         self.search_query = _query
-        self.unitydocs = LinkRead()()["2018API"]
+        self.year = None
         self.soup = None
         self.h2 = "h3"
 
@@ -169,30 +169,40 @@ class DefinitionUnity(object):
             _term += "```"
             return _term
 
-    @staticmethod
-    def look_for_term(name: str):
+    def look_for_term(self, name: str):
         _searcher = SrcDir()()
         _tried = None
-        for term in _searcher['2018']:
-            _term = term.lower()
-            if "." in _term:
-                if name.lower() == _term.split(".")[1].lower():
-                    _tried = term
-            else:
-                if name.lower() == _term.lower():
-                    _tried = term
+        found = False
+        for year in list(_searcher.keys()):
+            if not found:
+                for term in _searcher[year]:
+                    _term = term.lower()
+                    if "." in _term:
+                        if name.lower() == _term.split(".")[1].lower():
+                            _tried = term
+                            found = True
+                            self.year = year
+                    else:
+                        if name.lower() == _term.lower():
+                            _tried = term
+                            found = True
+                            self.year = year
 
-        if _tried is None:
-            for term in _searcher['2018']:
-                if name.lower() in term.lower():
-                    _tried = term
+                if _tried is None:
+                    for term in _searcher[year]:
+                        if name.lower() in term.lower():
+                            _tried = term
+                            found = True
+                            self.year = year
+            else:
+                break
 
         return _tried
 
     def search(self) -> tuple:
         _a = self.look_for_term(self.search_query)
         if _a is not None:
-            _link = "{0}{1}.html".format(self.unitydocs, _a)
+            _link = "{0}{1}.html".format(LinkRead()()["{0}API".format(self.year)], _a)
             _page = requests.get(_link)
             self.soup = Bs(_page.content, "html.parser")
             return _a, self.soup, _link

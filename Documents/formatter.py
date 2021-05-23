@@ -64,7 +64,7 @@ Available courses ({0}):
 def find_file(name=str()):
     # Our token path
     if os.name == 'nt':
-        json_path = 'I:\\{0}.json'.format(name)
+        json_path = 'J:\\{0}.json'.format(name)
         if not os.path.isfile(json_path):
             json_path = 'C:\\Users\\jeff3\\Desktop\\{0}.json'.format(name)
     else:
