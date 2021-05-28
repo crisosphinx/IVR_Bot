@@ -167,6 +167,7 @@ async def on_message(msg):
 
     if _content.lower().startswith(("!ping", "?ping")):
         await _c.send("Pong! {0} ms".format(round(client.latency, 1)))
+        _sheets.updatevalue('ping')
 
     if _content.lower().startswith(("?def", "!def")):
         _msg = _content.split("def ")[1].replace(" ", "")
@@ -247,7 +248,7 @@ async def on_message(msg):
                             else:
                                 _first_message.description = "..."
 
-            _sheets.updatevalue(name=_msg)
+            _sheets.updatevalue(name=_return[0])
 
         else:
             await _author.send("Term could not be found.")
@@ -258,11 +259,11 @@ async def on_message(msg):
         if _get.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_dls.keys())) + "```")
         else:
-            for each in list(_dls.keys()):
-                if _get.lower() in each.lower():
-                    _download = _dls[each]
+            for _each in list(_dls.keys()):
+                if _get.lower() in _each.lower():
+                    _download = _dls[_each]
                     if "." in _get:
-                        _year, _edition, _type = each.split(".")
+                        _year, _edition, _type = _each.split(".")
                         _ver = _type.split(" ")[0]
                         _type = _type.split(" ")[1]
                         embed = Embed()
@@ -274,11 +275,10 @@ async def on_message(msg):
                     else:
                         embed = Embed()
                         embed.url = _download
-                        embed.title = each
-                        embed.description = "Download link to {0}.".format(each)
+                        embed.title = _each
+                        embed.description = "Download link to {0}.".format(_each)
                     await _c.send(embed=embed)
-
-            _sheets.updatevalue(name=_get)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.startswith(("!website", "?website")):
         _web = Utilities.LinkRead()()["Websites"]
@@ -286,22 +286,22 @@ async def on_message(msg):
         if _get.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_web.keys())) + "```")
         else:
-            for each in list(_web.keys()):
-                if _get.lower() == each.lower():
+            for _each in list(_web.keys()):
+                if _get.lower() == _each.lower():
                     if (
-                            "Intro" in each or "Compendium" in each or
-                            "RecommendedPrograms" in each or "Documentation" in each or
-                            "ComputerRecommendations" in each
+                            "Intro" in _each or "Compendium" in _each or
+                            "RecommendedPrograms" in _each or "Documentation" in _each or
+                            "ComputerRecommendations" in _each
                     ):
-                        _website = "https://docs.google.com/document/d/{0}".format(_web[each])
+                        _website = "https://docs.google.com/document/d/{0}".format(_web[_each])
                     else:
-                        _website = _web[each]
+                        _website = _web[_each]
                     embed = Embed()
                     embed.url = _website
-                    embed.title = each
-                    embed.description = "Website link for {0}.".format(each)
+                    embed.title = _each
+                    embed.description = "Website link for {0}.".format(_each)
                     await _c.send(embed=embed)
-            _sheets.updatevalue(name=_get)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.startswith(("!about", "?about")):
         _teach = Utilities.LinkRead()()["Instructors"]
@@ -309,15 +309,15 @@ async def on_message(msg):
         if _get.lower() == "list":
             await _c.send("```\n" + "\n".join(list(_teach.keys())) + "```")
         else:
-            for each in list(_teach.keys()):
-                if _get.lower() == each.lower():
-                    _website = _teach[each]
+            for _each in list(_teach.keys()):
+                if _get.lower() == _each.lower():
+                    _website = _teach[_each]
                     embed = Embed()
                     embed.url = _website
-                    embed.title = each
-                    embed.description = "Website link for {0}.".format(each)
+                    embed.title = _each
+                    embed.description = "Website link for {0}.".format(_each)
                     await _c.send(embed=embed)
-            _sheets.updatevalue(name=_get)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.lower().startswith("when is my next class? "):
         _classname = _content.split("when is my next class? ")[1]
@@ -375,8 +375,7 @@ async def on_message(msg):
                     _embed.set_image(url=_images[_each])
                     _embed.title = "Instructions"
                     await _c.send(embed=_embed)
-
-            _sheets.updatevalue(name=_info)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.lower().startswith("?grade "):
         _info = _content.split("grade ")[1]
@@ -409,8 +408,7 @@ async def on_message(msg):
                     _embed.url = _cwc[_each]
                     _embed.description = "Link to the {0} course.".format(_info)
                     await _c.send(embed=_embed)
-
-            _sheets.updatevalue(name=_info)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.lower().startswith(("?troubleshooting ", "!troubleshooting ", "?troubleshoot ", "!troubleshoot ")):
         _trbl = Utilities.LinkRead()()["Troubleshooting"]
@@ -425,8 +423,7 @@ async def on_message(msg):
                     _embed.url = _trbl[_each]
                     _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
                     await _c.send(embed=_embed)
-
-            _sheets.updatevalue(name=_info)
+                    _sheets.updatevalue(name=_each)
 
     elif _content.lower().startswith(("!h", "?h")):
         if len(_content.split("h")[1]) == 0:
