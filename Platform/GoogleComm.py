@@ -106,9 +106,9 @@ class AttainGoogleClass(object):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                cred_path = find_file('credentials')
+                json_path = Utilities.Token()()
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    cred_path, self.scopes)
+                    json_path, self.scopes)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
@@ -278,9 +278,9 @@ class AttainGoogleSheet(object):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                cred_path = find_file('credentials')
+                json_path = Utilities.Token()()
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    cred_path, self.scopes)
+                    json_path, self.scopes)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:

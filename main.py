@@ -143,7 +143,7 @@ async def on_message(msg):
     _author = msg.author
     _content = msg.content
     _checkmsg = CheckMsg(ctx, _author.id)
-    _sheets = GoogleComm.AttainGoogleSheet(document_id="1CgWrVv-iomNiuZOIJXKkaWIYzVyfc_itQ1Fv9O97_2U")
+    _sheets = GoogleComm.AttainGoogleSheet(document_id=Utilities.LinkRead()()["Websites"]["Sheets"])
 
     def chunker(seq, size):
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
