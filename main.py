@@ -143,6 +143,7 @@ async def on_message(msg):
     _author = msg.author
     _content = msg.content
     _checkmsg = CheckMsg(ctx, _author.id)
+    _sheets = GoogleComm.AttainGoogleSheet(document_id="1CgWrVv-iomNiuZOIJXKkaWIYzVyfc_itQ1Fv9O97_2U")
 
     def chunker(seq, size):
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
@@ -246,6 +247,8 @@ async def on_message(msg):
                             else:
                                 _first_message.description = "..."
 
+            _sheets.updatevalue(name=_msg)
+
         else:
             await _author.send("Term could not be found.")
 
@@ -275,6 +278,8 @@ async def on_message(msg):
                         embed.description = "Download link to {0}.".format(each)
                     await _c.send(embed=embed)
 
+            _sheets.updatevalue(name=_get)
+
     elif _content.startswith(("!website", "?website")):
         _web = Utilities.LinkRead()()["Websites"]
         _get = "".join(_content.split(" ")[1:])
@@ -296,6 +301,7 @@ async def on_message(msg):
                     embed.title = each
                     embed.description = "Website link for {0}.".format(each)
                     await _c.send(embed=embed)
+            _sheets.updatevalue(name=_get)
 
     elif _content.startswith(("!about", "?about")):
         _teach = Utilities.LinkRead()()["Instructors"]
@@ -311,6 +317,7 @@ async def on_message(msg):
                     embed.title = each
                     embed.description = "Website link for {0}.".format(each)
                     await _c.send(embed=embed)
+            _sheets.updatevalue(name=_get)
 
     elif _content.lower().startswith("when is my next class? "):
         _classname = _content.split("when is my next class? ")[1]
@@ -339,6 +346,8 @@ async def on_message(msg):
 
         await _author.send(embed=embed)
 
+        _sheets.updatevalue(name=_word)
+
     elif _content.lower().startswith(("!get example ", "?get example ")):
         _get_example = _content.split("get example ")[1].replace(" ", "")
         _ex = Utilities.GetRandomExample()(_get_example)
@@ -347,6 +356,7 @@ async def on_message(msg):
             _embed.title = _get_example
             _embed.description = _ex
             await _c.send(embed=_embed)
+        _sheets.updatevalue(name=_get_example)
 
     elif _content.lower().startswith(("!list examples", "?list examples")):
         _all_ex = list(Utilities.ExamplesRead()().keys())
@@ -365,6 +375,8 @@ async def on_message(msg):
                     _embed.set_image(url=_images[_each])
                     _embed.title = "Instructions"
                     await _c.send(embed=_embed)
+
+            _sheets.updatevalue(name=_info)
 
     elif _content.lower().startswith("?grade "):
         _info = _content.split("grade ")[1]
@@ -398,6 +410,8 @@ async def on_message(msg):
                     _embed.description = "Link to the {0} course.".format(_info)
                     await _c.send(embed=_embed)
 
+            _sheets.updatevalue(name=_info)
+
     elif _content.lower().startswith(("?troubleshooting ", "!troubleshooting ", "?troubleshoot ", "!troubleshoot ")):
         _trbl = Utilities.LinkRead()()["Troubleshooting"]
         _info = " ".join(_content.split(" ")[1:])
@@ -412,10 +426,12 @@ async def on_message(msg):
                     _embed.description = "Link to the troubleshooting for: {0}.".format(_info)
                     await _c.send(embed=_embed)
 
+            _sheets.updatevalue(name=_info)
+
     elif _content.lower().startswith(("!h", "?h")):
         if len(_content.split("h")[1]) == 0:
             _all_cmds = """
-?/!h
+?/!h [command name]
 ?/!troubleshooting / ?/!troubleshoot [name]
 ?/!cwc [list / name]
 ?grade [class name]
@@ -424,7 +440,7 @@ async def on_message(msg):
 ?/!get example [name]
 ?/!what is [word]
 ?/!def [C# term]
-?/!about
+?/!about [instructor]
 ?/!website [list / name]
 ?/!download [list / name]
 when is my next class? [class name]
@@ -448,6 +464,7 @@ when is my next class? [class name]
 
         else:
             _get_word = _content.split("h ")[1]
+            _sheets.updatevalue(name=_get_word)
             if _get_word.lower() == "h":
                 await _c.send(
                     "```{0} can help you with any specific command or relaying all commands to you.```".format(
@@ -457,17 +474,15 @@ when is my next class? [class name]
 
             elif _get_word.lower() in ("troubleshooting", "troubleshoot"):
                 await _c.send(
-                    "```{0} takes exactly one argument. " +
-                    "Please type the associated troubleshoot you require.\n- {1}```".format(
-                        _get_word,
+                    "```{0} takes exactly one argument. ".format(_get_word) +
+                    "Please type the associated troubleshoot you require.\n- {0}```".format(
                         "\n- ".join(list(Utilities.LinkRead()()["Troubleshooting"].keys()))
                     ))
 
             elif _get_word.lower() == "cwc":
                 await _c.send(
-                    "```{0} takes exactly one argument. " +
-                    "Please type the associated course you require.\n- {1}```".format(
-                        _get_word,
+                    "```{0} takes exactly one argument. ".format(_get_word) +
+                    "Please type the associated course you require.\n- {0}```".format(
                         "\n- ".join(list(Utilities.LinkRead()()["CreateWCode"].keys()))
                     ))
 
@@ -497,10 +512,8 @@ when is my next class? [class name]
 
             elif _get_word.lower() == "what is":
                 await _c.send(
-                    "```{0} takes exactly one argument. " +
-                    "Please specify any word that you wish to get the definition of.```".format(
-                        _get_word
-                    )
+                    "```{0} takes exactly one argument. ".format(_get_word) +
+                    "Please specify any word that you wish to get the definition of.```"
                 )
 
             elif _get_word.lower() == "def":
@@ -512,27 +525,24 @@ when is my next class? [class name]
 
             elif _get_word.lower() == "about":
                 await _c.send(
-                    "```{0} takes exactly one argument. " +
-                    "You need to specify the instructor to learn about:\n- {1}```".format(
-                        _get_word,
+                    "```{0} takes exactly one argument. ".format(_get_word) +
+                    "You need to specify the instructor to learn about:\n- {0}```".format(
                         "\n- ".join(list(Utilities.LinkRead()()["Instructors"].keys()))
                     )
                 )
 
             elif _get_word.lower() == "website":
                 await _c.send(
-                    "```{0} takes exactly one argument. " +
-                    "You need to specify the website you with to go to.\n- {1}```".format(
-                        _get_word,
+                    "```{0} takes exactly one argument. ".format(_get_word) +
+                    "You need to specify the website you with to go to.\n- {0}```".format(
                         "\n- ".join(list(Utilities.LinkRead()()["Websites"].keys()))
                     )
                 )
 
             elif _get_word.lower() == "download":
                 await _c.send(
-                    "```{0} takes exactly one argument." +
-                    "You need to specify the download you want.\n- {1}```".format(
-                        _get_word,
+                    "```{0} takes exactly one argument.".format(_get_word) +
+                    "You need to specify the download you want.\n- {0}```".format(
                         "\n- ".join(list(Utilities.LinkRead()()["Downloads"].keys()))
                     )
                 )

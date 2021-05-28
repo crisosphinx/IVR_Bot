@@ -71,11 +71,10 @@ class AttainGoogleDoc(object):
         return rules
 
 
-class AttainGoogleClass(Thread):
+class AttainGoogleClass(object):
     def __init__(self, _classname: str) -> None:
         self.scopes = [
             'https://www.googleapis.com/auth/classroom.courses.readonly',
-            'https://www.googleapis.com/auth/classroom.coursework.students.readonly',
             'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
             'https://www.googleapis.com/auth/classroom.topics.readonly',
             "https://www.googleapis.com/auth/classroom.rosters"
@@ -250,6 +249,86 @@ class AttainGoogleClass(Thread):
         return [len(self.class_rosters), "\n".join(self.class_rosters)]
 
 
+class AttainGoogleSheet(object):
+    def __init__(self, document_id=str()) -> None:
+        """
+        Get a relative document.
+        """
+        self.docuid = document_id
+        self.scopes = ['https://www.googleapis.com/auth/spreadsheets']
+        self.sheet = self.googlesheet()
+
+    def __call__(self):
+        return self.getallvalues()
+
+    def googlesheet(self):
+        """Shows basic usage of the Sheets API.
+        Prints values from a sample spreadsheet.
+        """
+        creds = None
+        # The file token.json stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                cred_path = find_file('credentials')
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    cred_path, self.scopes)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+
+        service = build('sheets', 'v4', credentials=creds)
+        # Call the Sheets API
+        sheet = service.spreadsheets()
+
+        return sheet
+
+    def getallvalues(self) -> dict:
+        result = self.sheet.values().get(
+            spreadsheetId=self.docuid,
+            range="Sheet1!A1:B",
+        ).execute()
+        rows = result.get("values", [])
+        _dict = dict()
+
+        for each in rows:
+            _dict.setdefault(each[0], int(each[1]))
+        return _dict
+
+    def addvalues(self, revised_dict=None):
+        if revised_dict is None:
+            revised_dict = dict()
+
+        add_values = list()
+        for key in revised_dict:
+            add_values.append([key, revised_dict[key]])
+
+        result = self.sheet.values()
+        result.update(
+            spreadsheetId=self.docuid,
+            range="Sheet1!A1:B",
+            valueInputOption="USER_ENTERED",
+            body={"values": add_values}
+        ).execute()
+
+    def updatevalue(self, name: str):
+        processdict = self.getallvalues()
+        if name in processdict.keys():
+            processdict[name] += 1
+        else:
+            processdict.setdefault(name, 1)
+        self.addvalues(revised_dict=processdict)
+
+
 class ThreadClass(Thread):
     def __init__(self, _class=str(), _user=str()):
         self.results = dict()
@@ -284,11 +363,37 @@ def main():
     Prints the names of the first 10 courses the user has access to.
     """
 
-    _class = "R5 Universe: Introduction to Unity in 3D/VR"
-    _user = "Chelsie Harrison"
-    # assignments = AttainGoogleClass(_classname=_class).grades(_user)
-    _assignments = ThreadClass(_class, _user).attain_class_grades()
-    return _assignments
+    # _class = "R5 Universe: Introduction to Unity in 3D/VR"
+    # _user = "Chelsie Harrison"
+    # _assignments = ThreadClass(_class, _user).attain_class_grades()
+    # return _assignments
+    _sheet_docid = "1CgWrVv-iomNiuZOIJXKkaWIYzVyfc_itQ1Fv9O97_2U"
+    _doc = AttainGoogleSheet(document_id=_sheet_docid)
+
+    _words = Utilities.SrcDir()()
+    _new_read = dict()
+    for year in _words:
+        for key in _words[year]:
+            _new_read.setdefault(key, 0)
+
+    for _example in Utilities.ExamplesRead()():
+        _new_read.setdefault("'" + _example, 0)
+
+    _links = Utilities.LinkRead()()
+    _names = [x for x in _links if "API" not in x]
+    for _name in _names:
+        for _keyname in list(_links[_name].keys()):
+            _new_read.setdefault(_keyname, 0)
+
+    _new_read.setdefault("help", 0)
+    _new_read.setdefault("ping", 0)
+    _new_read.setdefault("download", 0)
+    _new_read.setdefault("website", 0)
+    _new_read.setdefault("about", 0)
+    _new_read.setdefault("troubleshoot", 0)
+
+    _doc.addvalues(_new_read)
+    # _doc.updatevalue("Gizmos")
 
 
 if __name__ == '__main__':
