@@ -11,7 +11,7 @@ from Platform import Utilities, GoogleComm
 import botcommands
 import MessageChecker
 
-# Intents
+# Intents.
 Intents = Intents().all()
 
 # Prefix for bot
