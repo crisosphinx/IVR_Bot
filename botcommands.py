@@ -11,7 +11,6 @@ import MessageChecker
 
 # Prefix for bot
 client = commands.Bot(command_prefix=Utilities.SettingsRead()()['CALLS'])
-bot_channel = None
 
 
 def chunker(seq, size):
