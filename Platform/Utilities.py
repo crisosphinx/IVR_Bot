@@ -323,7 +323,34 @@ class GetRandomExample(object):
                 return ""
 
 
+class GetLatestUnityInstaller(object):
+    def __init__(self, _type: str = str(), version: str or int = str() or int()) -> None:
+        """
+        Get the latest Unity Installer based on OS type and version.
+        :param _type: Windows or Mac.
+        :param version: Year.
+        """
+        self.link_repo = LinkRead()()
+        self.type = _type
+        self.version = version
+
+    def __call__(self) -> str:
+        return self.search_for_latest()
+
+    def search_for_latest(self) -> str:
+        _archive_dir = self.link_repo['Websites']['ArchiveUnity']
+        _page = requests.get(_archive_dir)
+        _soup = Bs(_page.content, "html.parser")
+        _together = str(_soup.find(id=f"version-{self.version}")).split("\n")
+        for each in _together:
+            if "Editor" in each and self.type in each:
+                _latest_version = each.split('"')[1]
+                return _latest_version
+
+
 if __name__ == '__main__':
-    _x = DefinitionUnity("camera")(False)
-    print(_x, len(_x))
+    _x = GetLatestUnityInstaller("Win", 2021)()
+    print(_x)
+    # _x = DefinitionUnity("camera")(False)
+    # print(_x, len(_x))
     # DefineWord()("purple")
