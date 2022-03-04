@@ -120,7 +120,7 @@ class Token(object):
         Attains the token location and returns the path back.
         """
         self.possible_loc = {
-            "nt": ['C:\\Users\\jeff3\\Desktop\\Tokens.json', "J:\\Tokens.json"],
+            "nt": ['B:\\Tokens.json', "J:\\Tokens.json"],
             "posix": ['/usr/bin/Tokens.json']
         }
 

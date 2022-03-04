@@ -20,14 +20,16 @@ class AttainGoogleDoc(object):
         Get a relative document.
         """
         self.docuid = document_id
-        self.scopes = ['https://www.googleapis.com/auth/documents.readonly']
+        if self.docuid is not None:
+            self.scopes = ['https://www.googleapis.com/auth/documents.readonly']
 
     def __call__(self) -> list:
         """
         Returns the google document in a list of information.
         :return:
         """
-        return self.googledoc()
+        if self.docuid is not None:
+            return self.googledoc()
 
     def googledoc(self) -> list:
         """
@@ -72,21 +74,22 @@ class AttainGoogleDoc(object):
 
 class AttainGoogleClass(object):
     def __init__(self, _classname: str) -> None:
-        self.scopes = [
-            'https://www.googleapis.com/auth/classroom.courses.readonly',
-            'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
-            'https://www.googleapis.com/auth/classroom.topics.readonly',
-            "https://www.googleapis.com/auth/classroom.rosters"
-        ]
-        self.classname = _classname
-        self.courses = None
-        self.service = None
-        self.class_groupings = dict()
-        self.topic_groupings = dict()
-        self.class_rosters = list()
-        self.course_info()
+        if _classname is not None:
+            self.scopes = [
+                'https://www.googleapis.com/auth/classroom.courses.readonly',
+                'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly',
+                'https://www.googleapis.com/auth/classroom.topics.readonly',
+                "https://www.googleapis.com/auth/classroom.rosters"
+            ]
+            self.classname = _classname
+            self.courses = None
+            self.service = None
+            self.class_groupings = dict()
+            self.topic_groupings = dict()
+            self.class_rosters = list()
+            self.course_info()
 
-        self.student_collective = dict()
+            self.student_collective = dict()
 
     def __call__(self):
         return self.get_class_work()
@@ -254,14 +257,16 @@ class AttainGoogleSheet(object):
         Get a relative document.
         """
         self.docuid = document_id
-        self.scopes = ['https://www.googleapis.com/auth/spreadsheets']
-        self.sheet = self.googlesheet()
+        if self.docuid is not None:
+            self.scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+            self.sheet = self.googlesheet()
 
     def __call__(self):
         return self.getallvalues()
 
     def googlesheet(self):
-        """Shows basic usage of the Sheets API.
+        """
+        Shows basic usage of the Sheets API.
         Prints values from a sample spreadsheet.
         """
         creds = None

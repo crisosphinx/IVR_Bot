@@ -66,7 +66,7 @@ def find_file(name=str()):
     if os.name == 'nt':
         json_path = 'J:\\{0}.json'.format(name)
         if not os.path.isfile(json_path):
-            json_path = 'C:\\Users\\jeff3\\Desktop\\{0}.json'.format(name)
+            json_path = 'B:\\{0}.json'.format(name)
     else:
         json_path = '/usr/bin/{0}.json'.format(name)
 
