@@ -98,31 +98,47 @@ async def whatis_caller(_content, _c, _sheets) -> Embed:
 
 
 async def download_caller(_content, _c, _sheets):
-    _dls = Utilities.LinkRead()()["Downloads"]
-    _get = "".join(_content.split(" ")[1:])
-    if _get.lower() == "list":
-        await _c.send("```\n" + "\n".join(list(_dls.keys())) + "```")
+    if "Unity" in _content:
+        _get = _content.split(" ")[2:]
+        _year = str()
+        _os = str()
+        for each in _get:
+            if each.isdigit():
+                _year = each
+            else:
+                _os = each
+        _download = Utilities.GetLatestUnityInstaller(_os, _year)()
+        embed = Embed()
+        embed.url = _download[1]
+        embed.title = " ".join(_content.split(" ")[1:])
+        embed.description = f"Download link to Unity version {_download[0]} for {_os}."
+        await _c.send(embed=embed)
     else:
-        for _each in list(_dls.keys()):
-            if _get.lower() in _each.lower():
-                _download = _dls[_each]
-                if "." in _get:
-                    _year, _edition, _type = _each.split(".")
-                    _ver = _type.split(" ")[0]
-                    _type = _type.split(" ")[1]
-                    embed = Embed()
-                    embed.url = _download
-                    embed.title = "{0}.{1}.{2} {3} Download".format(_year, _edition, _ver, _type)
-                    embed.description = "Link to the UnityHub {0}.{1}.{2}f1 {3} download.".format(
-                        _year, _edition, _ver, _type
-                    )
-                else:
-                    embed = Embed()
-                    embed.url = _download
-                    embed.title = _each
-                    embed.description = "Download link to {0}.".format(_each)
-                await _c.send(embed=embed)
-                _sheets.updatevalue(name=_each)
+        _dls = Utilities.LinkRead()()["Downloads"]
+        _get = "".join(_content.split(" ")[1:])
+        if _get.lower() == "list":
+            await _c.send("```\n" + "\n".join(list(_dls.keys())) + "```")
+        else:
+            for _each in list(_dls.keys()):
+                if _get.lower() in _each.lower():
+                    _download = _dls[_each]
+                    if "." in _get:
+                        _year, _edition, _type = _each.split(".")
+                        _ver = _type.split(" ")[0]
+                        _type = _type.split(" ")[1]
+                        embed = Embed()
+                        embed.url = _download
+                        embed.title = "{0}.{1}.{2} {3} Download".format(_year, _edition, _ver, _type)
+                        embed.description = "Link to the UnityHub {0}.{1}.{2}f1 {3} download.".format(
+                            _year, _edition, _ver, _type
+                        )
+                    else:
+                        embed = Embed()
+                        embed.url = _download
+                        embed.title = _each
+                        embed.description = "Download link to {0}.".format(_each)
+                    await _c.send(embed=embed)
+                    _sheets.updatevalue(name=_each)
 
 
 async def example_caller(_content, _c, _sheets):

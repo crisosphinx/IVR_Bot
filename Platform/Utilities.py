@@ -334,22 +334,25 @@ class GetLatestUnityInstaller(object):
         self.type = _type
         self.version = version
 
-    def __call__(self) -> str:
+    def __call__(self) -> tuple:
         return self.search_for_latest()
 
-    def search_for_latest(self) -> str:
-        _archive_dir = self.link_repo['Websites']['ArchiveUnity']
+    def search_for_latest(self) -> tuple:
+        _archive_dir = self.link_repo['Downloads']['ArchiveUnity']
         _page = requests.get(_archive_dir)
         _soup = Bs(_page.content, "html.parser")
         _together = str(_soup.find(id=f"version-{self.version}")).split("\n")
+        _version = None
         for each in _together:
+            if "Release notes" in each:
+                _version = each.split("whats-new/")[1].split('">')[0]
             if "Editor" in each and self.type in each:
                 _latest_version = each.split('"')[1]
-                return _latest_version
+                return _version, _latest_version,
 
 
 if __name__ == '__main__':
-    _x = GetLatestUnityInstaller("Win", 2021)()
+    _x = GetLatestUnityInstaller("Mac", 2021)()
     print(_x)
     # _x = DefinitionUnity("camera")(False)
     # print(_x, len(_x))

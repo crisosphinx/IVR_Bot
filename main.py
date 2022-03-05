@@ -105,7 +105,7 @@ async def on_message(msg):
     else:
         _start = _content.split(" ")[0]
         if _start.startswith("!"):
-            _c = await retrieve_channel(ctx, "bot-channel")
+            _c = await retrieve_channel(ctx, "universe-bot")
         else:
             _c = _author
 
@@ -160,7 +160,7 @@ async def on_message(msg):
         await client.process_commands(msg)
 
     if msg.content.startswith(("!", "?")):
-        if msg.content.count("!") == 1:
+        if msg.content.count("!") == 1 or msg.content.count("?") == 1:
             if _checkmsg.dm_check(msg):
                 pass
             elif _checkmsg.non_bot(msg):
