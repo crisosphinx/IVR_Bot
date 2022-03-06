@@ -259,12 +259,11 @@ async def showimage_caller(_content, _c, _sheets):
     _images = Utilities.LinkRead()()['Images']
     if _info.lower() == "list":
         await _c.send("```\n" + "\n".join(list(_images.keys())) + "```")
-
     else:
         for _each in _images.keys():
             if _info.lower() == _each.lower():
                 _embed = Embed()
-                _embed.set_image(url=_images[_each])
+                _embed.set_image(url=f"https://drive.google.com/uc?id={_images[_each]}")
                 _embed.title = "Instructions"
                 await _c.send(embed=_embed)
                 _sheets.updatevalue(name=_each)
