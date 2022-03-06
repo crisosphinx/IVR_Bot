@@ -156,6 +156,9 @@ async def on_message(msg):
     elif _content.lower().startswith(("!h", "?h")):
         await botcommands.help_caller(_content, _c, _sheets)
 
+    elif _content.lower().startswith(("?materials", "!materials")):
+        await botcommands.materials_caller(_content, _c, _sheets)
+
     else:
         await client.process_commands(msg)
 

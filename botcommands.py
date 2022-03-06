@@ -419,3 +419,19 @@ async def help_caller(_content, _c, _sheets):
                     "\n- ".join(list(Utilities.LinkRead()()["Downloads"].keys()))
                 )
             )
+
+
+async def materials_caller(_content, _c, _sheets):
+    _materials = Utilities.LinkRead()()["Materials"]
+    _info = " ".join(_content.split(" ")[1:])
+    if _info.lower() == "list":
+        await _c.send("```\n" + "\n".join(list(_materials.keys())) + "```")
+    else:
+        for _each in _materials.keys():
+            if _info.lower() == _each.lower():
+                _embed = Embed()
+                _embed.title = _each
+                _embed.url = _materials[_each]
+                _embed.description = "Link to the materials for: {0}.".format(_info)
+                await _c.send(embed=_embed)
+                _sheets.updatevalue(name=_each)
